@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>sottolio - è sopraffino</title>
+  <style> .asset { display: none; } </style>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+  <script src="https://raw.github.com/goldfire/CanvasInput/master/CanvasInput.min.js"></script>
+  <script src="http://www.canvastext.com/js/CanvasText-0.4.js"></script>
+  <script src="http://jonobr1.github.io/two.js/third-party/two.js"></script>
+</head>
+<body>
+
+<canvas id="game" width="1280" height="850" style="border:0px solid #000000;">
+  Your browser is not accepted here. Pick another one.
+</canvas> <img id="next" src="images/right_arrow.png">
+
+<img id="city_background" src="images/city_background.jpg" class="asset">
+<img id="girl1_character" src="images/girl1_character.png" class="asset">
+<img id="girl2_character" src="images/girl2_character.png" class="asset">
+
+<script>
+  var Database = (function() {
+    var variables;
+
+    function Database() {
+      variables = new Object();
+    };
+    Database.prototype.addKey = function(key, value) {
+      variables[key] = value;
+    };
+    Database.prototype.getKey = function(key) {
+      return variables[key];
+    };
+    return Database;
+  })();
+  </script>
+
+  <script>
+    CanvasRenderingContext2D.prototype.draw = function(os) {
+      for(var i = 0, len = os.length; i < len; ++i)
+        this.drawImage(os[i].id, os[i].x, os[i].y);
+    };
+
+    CanvasRenderingContext2D.prototype.write = function(what, keep = false) {
+      if(!keep) {
+        context.fillStyle = '#fff';
+        roundRect(context, 2, 725, 1276, 120);
+      }
+
+      canvasText.drawText({
+        x       : 5,
+        y       : 760,
+        text    : what,
+        boxWidth: '130px'
+      });
+    };
+  </script>
+
+  <script>
+    function get(id) {
+      return document.getElementById(id);
+    }
+
+    function getInput(text, id, fun = undefined, x = 10, y = 800) {
+      var input = new CanvasInput({
+        canvas: document.getElementById('game'),
+        x: x,
+        y: y,
+        placeHolder: text,
+        fontSize: 18,
+        fontFamily: 'Arial',
+        fontColor: '#212121',
+        fontWeight: 'bold',
+        width: 300,
+        padding: 8,
+        borderWidth: 1,
+        borderColor: '#000',
+        borderRadius: 3,
+        boxShadow: '1px 1px 0px #fff',
+        innerShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)'
+      });
+
+      input.onsubmit(function(a, b) {
+        if(fun != undefined)
+          (function(callback) { callback(id, b.value()); } )(fun);
+      }).onkeyup(function(a, b) {
+        if(fun != undefined)
+          (function(callback) { callback(id, b.value()); } )(fun);
+      }).focus();
+      
+      return input;
+    }
+
+    function roundRect(ctx, x, y, width, height, radius = 5, fill = true, stroke = true) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+      if (stroke) {
+        ctx.stroke();
+      }
+      if (fill) {
+        ctx.fill();
+      }        
+    }
+
+    function collides(rect, x, y) {
+      return x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
+    }
+
+    function getChoice(options, key, fun = undefined) {
+      context.fillStyle = 'rgba(255,255,255, 0.5)';
+      var rect;
+
+      rect = { x: 100, y: 619, w: 300, h: 100 };
+      roundRect(context, rect.x, rect.y, rect.w, rect.h);
+      canvasText.drawText({
+        x       : 110,
+        y       : 650,
+        text    : options[0].choice,
+        boxWidth: rect.w + 'px'
+      });
+      canvas.addEventListener('click', function(e) {
+        var x = e.pageX - canvas.offsetLeft,
+            y = e.pageY - canvas.offsetTop;
+
+        if(collides(rect, x, y)) {
+          if(fun != undefined)
+            (function(callback) { callback(key, options[0].id); } )(fun);
+            // TODO: destroy
+        }
+      }, false);
+
+
+      rect = { x: 800, y: 619, w: 300, h: 100 };
+      roundRect(context, rect.x, rect.y, rect.w, rect.h);
+      canvasText.drawText({
+        x       : 810,
+        y       : 650,
+        text    : options[1].choice,
+        boxWidth: rect.w + 'px'
+      });
+      canvas.addEventListener('click', function(e) {
+        var x = e.pageX - canvas.offsetLeft,
+            y = e.pageY - canvas.offsetTop;
+
+        if(collides(rect, x, y)) {
+          if(fun != undefined)
+            (function(callback) { callback(key, options[1].id); } )(fun);
+            // TODO: destroy
+        }
+      }, false);
+    }
+
+    var canvas    = get('game');
+    var context   = canvas.getContext('2d');
+        context.fillStyle = '#fff';
+    var next      = get('next');
+    var dialogues = [];
+    var database  = new Database();
+    var input;
+
+    var canvasText = new CanvasText;
+    canvasText.config({
+      canvasId  : 'game',
+      fontFamily: 'Arial',
+      fontSize  : '30px',
+      fontColor : '#000'
+    });
+
+    var res = [
+      {
+        id : get('city_background'),
+        x  : 0,
+        y  : 0
+      },
+
+      {
+        id : get('girl1_character'),
+        x  : 800,
+        y  : 120
+      },
+
+      {
+        id : get('girl2_character'),
+        x  : 10,
+        y  : 120
+      }
+    ];
+    context.draw(res);
+
+    dialogues.push( 'Hi!' );
+    dialogues.push( [
+      'My name is Ambrogia, and yours?',
+      function() { input = getInput('Your name', 'name', database.addKey); }
+    ] );
+    dialogues.push( 'Oh, hai #name#!' );
+    dialogues.push( [
+      'How do you feel?',
+      function() { getChoice( [{ choice: 'Good', id: 'good' }, { choice: 'Bad', id: 'bad' }], 'feel', database.addKey )}
+    ] );
+    dialogues.push( 'Oh, #feel#!' );
+
+    dialogues = dialogues.reverse();
+
+    var nextDialogue = function() {
+      var dialogue;
+      if(dialogues.length > 0)
+        dialogue = dialogues.pop();
+
+      switch(typeof dialogue) {
+        case 'object':
+          context.write(dialogue[0]);
+          (function(callback) { callback(); } )(dialogue[1]);
+          break;
+        case 'string':
+          pattern = /#(.*)#/g;
+          if(dialogue.match(pattern) != null)
+            context.write(dialogue.replace(pattern, function(s, m) { return database.getKey(m); }));
+          else
+            context.write(dialogue);
+          break;
+        case 'function':
+          (function(callback) { callback(); } )(dialogue);
+          break;
+      }
+    };
+
+    nextDialogue();
+    next.addEventListener('click', nextDialogue, false);
+
+/*
+
+  CanvasRenderingContext2D.prototype.swap = function(res) {
+    var tmp      = res[2]['id'];
+    res[2]['id'] = res[1]['id'];
+    res[1]['id'] = tmp;
+    this.draw(res);
+  };
+
+  String.prototype.breakLine = function() {
+    return this.substr(0, Math.min(this.length, this.lastIndexOf(' ')));
+  };
+
+  CanvasRenderingContext2D.prototype.write = function(what, keep = false) {
+    if(!keep)
+      context.fillRect(0, 720, 1280, 130);
+
+    var len           = what.length;
+    var max           = 95;
+    var very_max      = max * 2;
+
+    // Don't make three lines. It's horrible. Don't do.
+    // You can really destroy the portant lines of the world!
+    if(len >= very_max) {
+      context.strokeText(what.slice(0,  max).breakLine(), 10, 760);
+      context.strokeText(what.slice(max, max * 2).breakLine(), 10, 795);
+      context.strokeText(what.slice(max * 2, len).trim(), 10, 830);
+    }
+    else if(len >= max) {
+      context.strokeText(what.slice(0,  max).breakLine(), 10, 760);
+      context.strokeText(what.slice(max, len).trim(),     10, 795);
+    }
+    else
+      context.strokeText(what, 10, 770);
+  };
+*/
+</script>
+
+</body>
+</html>
