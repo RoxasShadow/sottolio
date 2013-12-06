@@ -1,15 +1,20 @@
 require 'opal'
-require './utils'
-require './canvas'
-require './canvasinput'
-require './canvastext'
 require './sottolio'
+require './utils'
 
-canvas_id = Sottolio::get('game')
-canvas   = Canvas.new canvas_id
+require './dsl'
+require './script/script'
+
+require './canvas'
+require './lib/canvasinput'
+require './lib/canvastext'
+
+canvas_id = Sottolio::get 'game'
+canvas    = Canvas.new canvas_id
 canvas.fill_style = '#fff'
 go_next   = Sottolio::get 'next'
-dialogues = []
+
+script    = Script.new(@scripts).get_all.reverse
 database  = Sottolio::Database.new
 
 canvas_text = CanvasText.new canvas_id, '2d', {
@@ -19,75 +24,54 @@ canvas_text = CanvasText.new canvas_id, '2d', {
   :font_color  => '#000'
 }
 
-res = [
-  {
-    id: Sottolio::get('city_background'),
-     x: 0,
-     y: 0
-  },
-
-  {
-    id: Sottolio::get('girl1_character'),
-     x: 800,
-     y: 120
-  },
-
-  {
-    id: Sottolio::get('girl2_character'),
-     x: 10,
-     y: 120
-  }
-]
-
-canvas.draw res
-
-dialogues << 'Hi!'
-dialogues << {
-  :text => 'My name is Ambrogia, and yours?',
-  :fun  =>  -> { CanvasInput.new canvas_id, database, 'name', 'Your name' }
-}
-dialogues << 'Oh, hai #name#!'
-dialogues << {
-  :text     => 'How do you feel?',
-  :options  =>  -> {
-    choice = [
-      { text: 'Good', id: 'good' },
-      { text: 'Bad',  id: 'bad'  }
-    ]
-    canvas_text.get_choice database, choice, 'feel'
-  }
-}
-dialogues << 'Oh, #feel#!'
-
-dialogues.reverse!
+characters = []
+input      = nil
 
 next_dialogue = -> {
-  if dialogues.any?
-    canvas.clear
+  if (!input || input.destroyed? || (input.alive? && input.fill?)) && script.any?
+    input.save_and_destroy! if input.is_a?(CanvasInput) && input.alive?
+    canvas.fill_style = '#fff' # CanvasInput rewrites it
+    dialogue = script.pop
 
-    dialogue = dialogues.pop
-    case dialogue
-      when Hash
-        canvas_text.write dialogue[:text]
-        dialogue.each { |k, v|
-          v.call if v.is_a? Proc
-        }
-      when String
-        pattern = /\#(.+)\#/
-        r = '' # #tap doesn't seem to work here
-        dialogue.split(pattern).each { |s|
-          r += (database.has?(s) ? database.get(s) : s)
-        }
-        canvas_text.write r
+    case dialogue.keys.first
+      when :playSound
+        # TODO
+        next_dialogue.call
+      when :stopSound
+        # TODO
+        next_dialogue.call
+      when :background
+        canvas.draw([{
+          id: Sottolio::get("#{dialogue[:background][:resource]}_background"),
+           x: 0,
+           y: 0
+        }])
+        next_dialogue.call
+      when :render
+        characters << dialogue[:render]
+        canvas.draw([{
+          id: Sottolio::get("#{dialogue[:render][:resource]}_character"),
+           x: dialogue[:render][:x],
+           y: dialogue[:render][:y]
+        }])
+        next_dialogue.call
+      when :dialogue
+        canvas.clear
+        canvas_text.write "#{dialogue[:dialogue][:name].apply(database)}: #{dialogue[:dialogue][:text].apply(database)}"
+      when :input
+        canvas.clear
+        canvas_text.write "#{dialogue[:input][:name].apply(database)}: #{dialogue[:input][:text].apply(database)}"
+        input = CanvasInput.new canvas_id, database, dialogue[:input][:id], dialogue[:input][:request].apply(database)
+      when :choice
+        canvas.clear
+        canvas_text.write "#{dialogue[:choice][:name].apply(database)}: #{dialogue[:choice][:text].apply(database)}"
+        canvas_text.get_choice database, dialogue[:choice][:options], dialogue[:choice][:id], next_dialogue
     end
   end
 }
 
 next_dialogue.call
-
 Sottolio::add_listener :click, go_next, next_dialogue
 
 # TODO:
-# - DSL
-# - Hide choice button and go next after the click
-# - Hide textbox after the input
+# - Disable #next_dialogue when choice buttons are visible and then hide them

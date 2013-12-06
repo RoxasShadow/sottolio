@@ -3,7 +3,8 @@ class CanvasText < Canvas
 
   def initialize(element, context = '2d', hash = nil)
     super element, context
-    @canvas_id=element
+
+    @canvas_id = element
     %x{
       #@canvas_text = new CanvasText;
     }
@@ -42,7 +43,7 @@ class CanvasText < Canvas
     })
   end
 
-  def get_choice(database, options, key)
+  def get_choice(database, options, key, on_success)
     fill_style = 'rgba(200, 54, 54, 0.5)'
 
     rect = [
@@ -66,6 +67,7 @@ class CanvasText < Canvas
 
         if collides? r, x, y
           database.add key, options[i][:id]
+          on_success.call
           # TODO: destroy
         end
       }
