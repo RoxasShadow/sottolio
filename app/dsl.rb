@@ -14,12 +14,12 @@ class Script
   def append(block)
     instance_eval &block
   end
-  alias_method :<<, :append
+    alias_method :<<, :append
 
   def has?(type)
     @var.any?   { |h| h.keys.first.to_sym == type.to_sym }
   end
-  alias_method :include?, :has?
+    alias_method :include?, :has?
 
   def how_many?(type = nil)
     if block_given?
@@ -30,7 +30,7 @@ class Script
       @var.count  { |h| h.keys.first.to_sym == type.to_sym }
     end
   end
-  alias_method :count, :how_many?
+    alias_method :count, :how_many?
 
   def get(type)
     @var.select { |h| h.keys.first.to_sym == type.to_sym }

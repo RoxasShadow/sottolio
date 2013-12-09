@@ -26,10 +26,9 @@ module Sottolio
     def has?(key)
       @db.include? key
     end
-
-    alias_method :exist?,   :has?
-    alias_method :exists?,  :has?
-    alias_method :include?, :has?
+      alias_method :exist?,   :has?
+      alias_method :exists?,  :has?
+      alias_method :include?, :has?
   end
 
   class Block

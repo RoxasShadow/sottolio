@@ -1,8 +1,8 @@
 class CanvasText < Canvas
   attr_accessor :canvas_text
 
-  def initialize(element, context = '2d', hash = nil)
-    super element, context
+  def initialize(element, hash = nil)
+    super element, '2d'
 
     @canvas_id = element
     %x{

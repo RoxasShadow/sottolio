@@ -1,27 +1,27 @@
 (@scripts ||= []) << Proc.new do
-  background      :resource  => 'city'
+  background      :resource  => 'resources/backgrounds/city.jpg' # sugar for character with coordinates set to 0
 
-  playSound       :id        => 'background_theme',
-                  :resource  => 'sounds/Classmate.m4a',
+  play_sound      :id        => 'background_theme',
+                  :resource  => 'resources/sounds/Classmate.m4a',
                   :loop      => true,
-                  :volume    => 0.3
+                  :volume    => 0.3 # 0.0 - 1.0
 
-  render          :resource  => 'girl1',
-                  :name      => 'Ambrogia',
+  character       :resource  => 'resources/characters/rosalinda.png',
+                  :name      => 'Rosalinda', # useless, it's just a placeholder
                   :x         => 800,
                   :y         => 120
 
-  render          :resource  => 'girl2',
-                  :name      => 'Rosalinda',
+  character       :resource  => 'resources/characters/ambrogia.png',
+                  :name      => 'Ambrogia',
                   :x         => 10,
                   :y         => 120
 
-  dialogue        :name      => 'Ambrogia',
+  dialogue        :name      => 'Ambrogia', # optional
                   :text      => 'Hi!'
                   
   input           :name      => 'Ambrogia',
                   :text      => 'My name is Ambrogia, and yours?',
-                  :id        => 'name',
+                  :id        => 'name', # the variable where the input will be saved
                   :request   => 'Your name'
                   
   dialogue        :name      => 'Ambrogia',
@@ -38,5 +38,5 @@
   dialogue        :name      => 'Ambrogia',
                   :text      => 'Oh, #feel#!'
 
-  stopSound       :id        => 'background_theme'
+  stop_sound      :id        => 'background_theme'
 end

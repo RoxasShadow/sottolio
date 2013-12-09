@@ -1,8 +1,8 @@
 class CanvasButton < CanvasText
   attr_accessor :block
 
-  def initialize(element, context = '2d', hash = nil, block = nil)
-    super element, context, hash
+  def initialize(element, hash = nil, block = nil)
+    super element, hash
     @block = block || Sottolio::Block.new
   end
 

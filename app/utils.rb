@@ -26,4 +26,8 @@ class String
     }
     return r
   end
+
+  def filename
+    self.split('/').last
+  end
 end
