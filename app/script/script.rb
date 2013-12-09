@@ -1,8 +1,10 @@
 (@scripts ||= []) << Proc.new do
   background      :resource  => 'city'
 
-  playSound       :resource  => 'fur_ambrogia',
-                  :loop      => true
+  playSound       :id        => 'background_theme',
+                  :resource  => 'sounds/Classmate.m4a',
+                  :loop      => true,
+                  :volume    => 0.3
 
   render          :resource  => 'girl1',
                   :name      => 'Ambrogia',
@@ -36,5 +38,5 @@
   dialogue        :name      => 'Ambrogia',
                   :text      => 'Oh, #feel#!'
 
-  stopSound       :resource  => 'fur_umbrogia'
+  stopSound       :id        => 'background_theme'
 end

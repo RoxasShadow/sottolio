@@ -5,40 +5,50 @@ require './utils'
 require './dsl'
 require './script/script'
 
-require './canvas'
-require './lib/canvasinput'
-require './lib/canvastext'
+require './lib/canvas'
+require './lib/canvas/canvasinput'
+require './lib/canvas/canvastext'
+require './lib/canvas/canvasbutton'
+
+require './lib/sound'
+require './soundmanager'
 
 canvas_id = Sottolio::get 'game'
-canvas    = Canvas.new canvas_id
-canvas.fill_style = '#fff'
 go_next   = Sottolio::get 'next'
+canvas    = Canvas.new canvas_id
 
 script    = Script.new(@scripts).get_all.reverse
 database  = Sottolio::Database.new
 
-canvas_text = CanvasText.new canvas_id, '2d', {
+block  = Sottolio::Block.new
+config = {
   :canvas_id   => 'game',
   :font_family => 'Arial',
   :font_size   => '30px',
   :font_color  => '#000'
 }
+canvas_text   = CanvasText.new   canvas_id, '2d', config
+canvas_button = CanvasButton.new canvas_id, '2d', config, block
+
+sound_manager = SoundManager.new
 
 characters = []
+sounds     = {}
 input      = nil
 
 next_dialogue = -> {
-  if (!input || input.destroyed? || (input.alive? && input.fill?)) && script.any?
+  if block.free? && (!input || input.destroyed? || (input.alive? && input.fill?)) && script.any?
     input.save_and_destroy! if input.is_a?(CanvasInput) && input.alive?
-    canvas.fill_style = '#fff' # CanvasInput rewrites it
+    canvas.fill_style = '#fff'
     dialogue = script.pop
 
     case dialogue.keys.first
       when :playSound
-        # TODO
+        sound_manager.add  dialogue[:playSound][:id], Sound.new(dialogue[:playSound][:resource], dialogue[:playSound][:loop], dialogue[:playSound][:volume])
+        sound_manager.play dialogue[:playSound][:id]
         next_dialogue.call
       when :stopSound
-        # TODO
+        sound_manager.stop dialogue[:stopSound][:id]
         next_dialogue.call
       when :background
         canvas.draw([{
@@ -65,7 +75,7 @@ next_dialogue = -> {
       when :choice
         canvas.clear
         canvas_text.write "#{dialogue[:choice][:name].apply(database)}: #{dialogue[:choice][:text].apply(database)}"
-        canvas_text.get_choice database, dialogue[:choice][:options], dialogue[:choice][:id], next_dialogue
+        canvas_button.get_choice database, dialogue[:choice][:options], dialogue[:choice][:id], next_dialogue
     end
   end
 }
@@ -73,5 +83,4 @@ next_dialogue = -> {
 next_dialogue.call
 Sottolio::add_listener :click, go_next, next_dialogue
 
-# TODO:
-# - Disable #next_dialogue when choice buttons are visible and then hide them
+# TODO: Image

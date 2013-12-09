@@ -32,6 +32,30 @@ module Sottolio
     alias_method :include?, :has?
   end
 
+  class Block
+    attr_accessor :block
+
+    def initialize
+      @block = false
+    end
+
+    def blocked?
+      @block
+    end
+
+    def free?
+      !@block
+    end
+
+    def block!
+      @block = true
+    end
+
+    def free!
+      @block = false
+    end
+  end
+
   def Sottolio.get(id)
     `document.getElementById(id)`
   end
