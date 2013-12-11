@@ -33,3 +33,23 @@ class String
     self.start_with?(?/) && self.end_with?(?/) ? /#{self[1..-2]}/ : self
   end
 end
+
+class Hash
+  def true?(database)
+    return true unless self.include?(:if) || self.include?(:if_not)
+
+    res = []
+    sym = self.include?(:if) ? :if : :if_not
+    [self[sym]].flatten.each { |c|
+      statement = c.apply(database).split(/(.+)(==|!=|=~)(.+)/).delete_if { |s| s.strip.empty? }.map { |s| s.strip }
+      eval = case statement[1] # #send won't work with !=
+        when '==' then statement[0] == statement[2]
+        when '!=' then statement[0] != statement[2]
+        when '=~' then statement[0] =~ statement[2].to_regex
+      end
+      res << eval
+    }
+    res << res.inject { |sum, x| sum && x }
+    return sym == :if ? res.last : !res.last
+  end
+end

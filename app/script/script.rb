@@ -20,8 +20,6 @@ character   :id        => 'Ambrogia',
 
 dialogue    :name      => 'Ambrogia',                           # optional
             :text      => 'Hi!'
-
-remove      :id        => 'Ambrogia'
             
 input       :name      => 'Ambrogia',
             :text      => 'My name is Ambrogia, and yours?',
@@ -35,6 +33,8 @@ dialogue    :name      => 'Ambrogia',
 dialogue    :name      => 'Ambrogia',
             :text      => 'Don\'t tease me >:(',
             :if_not    => '#name# =~ /^[a-zA-Z]+$/'
+
+remove      :id        => 'Rosalinda'
 
 choice      :name      => 'Ambrogia',
             :text      => 'How do you feel?',
@@ -55,6 +55,11 @@ dialogue    :name      => 'Ambrogia',
 dialogue    :name      => 'Ambrogia',
             :text      => 'I\'m sorry you feel bad!',
             :if        => '#feel# == bad'
+
+dialogue    :name      => 'Ambrogia',
+            :text      => 'Ok, time to go, cya!'
+
+remove      :id        => 'Ambrogia'
 
 stop_sound  :id        => 'background_theme'
 end
