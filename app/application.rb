@@ -18,6 +18,7 @@
 #++
 require 'opal'
 require './sottolio'
+require './database'
 require './utils'
 
 require './dsl'
@@ -36,8 +37,9 @@ canvas_id = Sottolio::get 'game'
 go_next   = Sottolio::get 'next'
 canvas    = Canvas.new canvas_id
 
-script    = Script.new(@scripts).get_all.reverse
-database  = Sottolio::Database.new
+database  = Database.new
+script    = Script.new @scripts
+script.reverse!
 
 block  = Sottolio::Block.new
 config = {
@@ -53,6 +55,24 @@ sound_manager = SoundManager.new
 images        = []
 input         = nil
 
+condition = -> (current) {
+  return true unless current.include?(:if) || current.include?(:if_not)
+
+  res = []
+  sym = current.include?(:if) ? :if : :if_not
+  [current[sym]].flatten.each { |c|
+    statement = c.apply(database).split(/(.+)(==|!=|=~)(.+)/).delete_if { |s| s.strip.empty? }.map { |s| s.strip }
+    eval = case statement[1] # #send won't work with !=
+      when '==' then statement[0] == statement[2]
+      when '!=' then statement[0] != statement[2]
+      when '=~' then statement[0] =~ statement[2].to_regex
+    end
+    res << eval
+  }
+  res << res.inject { |sum, x| sum && x }
+  return sym == :if ? res.last : !res.last
+}
+
 next_dialogue = -> {
   if block.free? && (!input || input.destroyed? || (input.alive? && input.fill?)) && script.any?
     input.save_and_destroy! if input.is_a?(CanvasInput) && input.alive?
@@ -61,25 +81,30 @@ next_dialogue = -> {
     current = script.pop
     case current.keys.first
       when :play_sound
+        return next_dialogue.call unless condition.call current[:play_sound]
         sound_manager.add  current[:play_sound][:id], Sound.new(current[:play_sound][:resource], current[:play_sound][:loop], current[:play_sound][:volume])
         sound_manager.play current[:play_sound][:id]
         next_dialogue.call
       when :stop_sound
+        return next_dialogue.call unless condition.call current[:stop_sound]
         sound_manager.stop current[:stop_sound][:id]
         next_dialogue.call
       when :background
+        return next_dialogue.call unless condition.call current[:background]
         background = Image.new canvas_id, current[:background][:resource], current[:background][:resource].filename, 'asset'
         background.save
         background.draw 0, 0
         images << background
         next_dialogue.call
       when :character
+        return next_dialogue.call unless condition.call current[:character]
         character = Image.new canvas_id, current[:character][:resource], current[:character][:resource].filename, 'asset'
         character.save
         character.draw current[:character][:x], current[:character][:y]
         images << character
         next_dialogue.call
       when :dialogue
+        return next_dialogue.call unless condition.call current[:dialogue]
         canvas.clear
         if current[:dialogue].include? :name
           canvas_text.write "#{current[:dialogue][:name].apply(database)}: #{current[:dialogue][:text].apply(database)}"
@@ -87,6 +112,7 @@ next_dialogue = -> {
           canvas_text.write current[:dialogue][:text].apply(database)
         end
       when :input
+        return next_dialogue.call unless condition.call current[:input]
         canvas.clear
         if current[:input].include? :name
           canvas_text.write "#{current[:input][:name].apply(database)}: #{current[:input][:text].apply(database)}"
@@ -95,6 +121,7 @@ next_dialogue = -> {
         end
         input = CanvasInput.new canvas_id, database, current[:input][:id], current[:input][:request].apply(database)
       when :choice
+        return next_dialogue.call unless condition.call current[:choice]
         canvas.clear
         if current[:choice].include? :name
           canvas_text.write "#{current[:choice][:name].apply(database)}: #{current[:choice][:text].apply(database)}"
@@ -108,3 +135,6 @@ next_dialogue = -> {
 
 next_dialogue.call
 Sottolio::add_listener :click, go_next, next_dialogue
+
+# TODO:
+# - remove character

@@ -22,10 +22,14 @@ class String
     self.split(pattern).each { |s|
       r += (database.has?(s) ? database.get(s) : s)
     }
-    return r
+    r
   end
 
   def filename
     self.split('/').last
+  end
+
+  def to_regex
+    self.start_with?(?/) && self.end_with?(?/) ? /#{self[1..-2]}/ : self
   end
 end

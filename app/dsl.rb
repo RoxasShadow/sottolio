@@ -18,6 +18,7 @@
 #++
 class Script
   include Enumerable
+  attr_accessor :var
 
   def initialize(procs = [])
     @var = []
@@ -56,6 +57,26 @@ class Script
 
   def get_all
     @var
+  end
+
+  def first
+    @var.first
+  end
+
+  def last
+    @var.last
+  end
+
+  def pop
+    @var.pop
+  end
+
+  def reverse
+    @var.reverse
+  end
+
+  def reverse!
+    @var.reverse!
   end
 
   def to_s
