@@ -3,18 +3,18 @@
 #
 # This file is part of sottolio.
 #
-# Botémon is free software: you can redistribute it and/or modify
+# sottolio is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Botémon is distributed in the hope that it will be useful,
+# sottolio is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Botémon.  If not, see <http://www.gnu.org/licenses/>.
+# along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
 require 'opal'
 require './sottolio'
@@ -30,6 +30,10 @@ require './lib/canvas/canvastext'
 require './lib/canvas/canvasbutton'
 
 require './lib/image'
+require './lib/background'
+require './lib/character'
+require './imagemanager'
+
 require './lib/sound'
 require './soundmanager'
 
@@ -52,7 +56,7 @@ canvas_text   = CanvasText.new   canvas_id, config
 canvas_button = CanvasButton.new canvas_id, config, block
 
 sound_manager = SoundManager.new
-images        = []
+image_manager = ImageManager.new
 input         = nil
 
 condition = -> (current) {
@@ -91,17 +95,18 @@ next_dialogue = -> {
         next_dialogue.call
       when :background
         return next_dialogue.call unless condition.call current[:background]
-        background = Image.new canvas_id, current[:background][:resource], current[:background][:resource].filename, 'asset'
-        background.save
-        background.draw 0, 0
-        images << background
+        image_manager.add  Background.new(canvas_id, current[:background][:resource], current[:background][:id], 'asset')
+        image_manager.save current[:background][:id]
+        image_manager.draw current[:background][:id]
         next_dialogue.call
       when :character
         return next_dialogue.call unless condition.call current[:character]
-        character = Image.new canvas_id, current[:character][:resource], current[:character][:resource].filename, 'asset'
-        character.save
-        character.draw current[:character][:x], current[:character][:y]
-        images << character
+        image_manager.add  Character.new(canvas_id, current[:character][:resource], current[:character][:id], 'asset', current[:character][:x], current[:character][:y])
+        image_manager.save current[:character][:id]
+        image_manager.draw current[:character][:id]
+        next_dialogue.call
+      when :remove
+        image_manager.remove current[:remove][:id]
         next_dialogue.call
       when :dialogue
         return next_dialogue.call unless condition.call current[:dialogue]
@@ -135,6 +140,3 @@ next_dialogue = -> {
 
 next_dialogue.call
 Sottolio::add_listener :click, go_next, next_dialogue
-
-# TODO:
-# - remove character

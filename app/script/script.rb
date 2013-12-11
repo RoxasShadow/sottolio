@@ -1,23 +1,27 @@
 (@scripts ||= []) << Proc.new do
-background  :resource  => 'resources/backgrounds/city.jpg'      # sugar for character with coordinates set to 0
+background  :id        => 'city',                               # it's the placeholder for remove
+            :resource  => 'resources/backgrounds/city.jpg'
+            
 
 play_sound  :id        => 'background_theme',
             :resource  => 'resources/sounds/Classmate.m4a',
             :loop      => true,
             :volume    => 0.0001                                # 0.0 - 1.0
 
-character   :resource  => 'resources/characters/rosalinda.png',
-            :name      => 'Rosalinda',                          # useless, it's just a placeholder
+character   :id        => 'Rosalinda',
+            :resource  => 'resources/characters/rosalinda.png',
             :x         => 800,
             :y         => 120
 
-character   :resource  => 'resources/characters/ambrogia.png',
-            :name      => 'Ambrogia',
+character   :id        => 'Ambrogia',
+            :resource  => 'resources/characters/ambrogia.png',
             :x         => 10,
             :y         => 120
 
 dialogue    :name      => 'Ambrogia',                           # optional
             :text      => 'Hi!'
+
+remove      :id        => 'Ambrogia'
             
 input       :name      => 'Ambrogia',
             :text      => 'My name is Ambrogia, and yours?',
