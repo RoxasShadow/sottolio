@@ -16,27 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
-require 'opal'
-require './sottolio'
-require './block'
-require './database'
-require './utils'
 
-require './dsl'
-require './script/script'
-
-require './lib/canvas'
-require './lib/canvas/canvasinput'
-require './lib/canvas/canvastext'
-require './lib/canvas/canvasbutton'
-
-require './lib/image'
-require './lib/background'
-require './lib/character'
-require './imagemanager'
-
-require './lib/sound'
-require './soundmanager'
+unless @scripts.is_a?(Array) && @scripts.any?
+  puts 'No scripts found.'
+  return
+end
 
 canvas_id = Sottolio::get 'game'
 go_next   = Sottolio::get 'next'

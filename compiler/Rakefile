@@ -1,12 +1,12 @@
 require 'bundler'
 Bundler.require
 
-desc 'Build our app to sottolio.js'
+desc 'Build the script to game/sottolio.js'
 task :build do
   env = Opal::Environment.new
-  env.append_path 'app'
+  env.append_path 'opal'
 
-  File.open('sottolio.js', 'w+') do |out|
+  File.open('../game/sottolio.js', 'w+') do |out|
     out << env['application'].to_s
   end
 end
