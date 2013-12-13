@@ -71,7 +71,7 @@ next_dialogue = -> {
         image_manager.draw current[:character][:id], current[:character][:x],        current[:character][:y]
         next_dialogue.call
       when :remove
-        image_manager.remove current[:remove][:id], current[:remove][:fade], current[:remove][:position], current[:remove][:speed]
+        image_manager.remove current[:remove][:id], current[:remove][:animation], current[:remove][:to], current[:remove][:speed]
         next_dialogue.call
       when :dialogue
         return next_dialogue.call unless current[:dialogue].true? database

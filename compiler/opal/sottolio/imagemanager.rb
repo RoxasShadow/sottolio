@@ -27,11 +27,11 @@ class ImageManager
     @images[image.id.to_sym] = image
   end
 
-  def remove(id, fade = false, position = nil, speed = nil)
+  def remove(id, animation = :none, to = nil, speed = nil)
     redraw = -> { @images.each_value &:draw }
     delete = -> { @images.delete id.to_sym; @images.each_value &:draw }
-    if fade
-      @images[id.to_sym].fade_out redraw, delete, position, speed
+    if animation == :slide
+      @images[id.to_sym].slide redraw, delete, to, speed
     else
       delete.call
     end

@@ -46,10 +46,10 @@ class Image < Canvas
     (@width + @x) < 0 || (@x + width) > 1276
   end
 
-  def fade_out(pre_callback = nil, callback = nil, position = :right, speed = 1)
+  def slide(pre_callback = nil, callback = nil, to = :right, speed = 1)
     move = -> {
       unless out?
-        @x = @x + ((position == :left ? -1 : 1) * speed)
+        @x = @x + ((to == :left ? -1 : 1) * speed)
         draw @x, @y, true
         pre_callback.call if pre_callback
       else

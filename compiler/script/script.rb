@@ -35,8 +35,8 @@ dialogue    :name      => 'Ambrogia',
             :if_not    => '#name# =~ /^[a-zA-Z]+$/'
 
 remove      :id        => 'Rosalinda',
-            :fade      => true,                                 # apply a fade out animation to left with speed set to 1.7
-            :position  => :left,
+            :animation => :slide,                                 # apply a slide animation to left with speed set to 1.7
+            :to        => :left,
             :speed     => 1.7
 
 choice      :name      => 'Ambrogia',
