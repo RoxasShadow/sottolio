@@ -17,36 +17,47 @@
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
 class Image < Canvas
-  attr_accessor :src, :id, :klass, :x, :y
+  attr_accessor :image, :id, :x, :y, :width, :height
 
-  def initialize(element, src, id = '', klass = '', x = 0, y = 0)
+  def initialize(element, image, id, x = 0, y = 0)
     super element
     
-    @src   = src
-    @id    = id
-    @klass = klass
-    @x     = x
-    @y     = y
+    @image = `new Image()`
+      `#@image.src = image`
+    @id     = id
+    @x      = x
+    @y      = y
+    @width  = `#@image.width`
+    @height = `#@image.height`
   end
 
-  def append_to_html
-    %x{
-      var img = document.createElement('img');
-          img.id        = #@id;
-          img.className = #@klass;
-          img.src       = #@src;
-      document.body.appendChild(img);
-    }
-  end
-    alias_method :write, :append_to_html
-    alias_method :save,  :append_to_html
-
-  def draw(x = nil, y = nil)
+  def draw(x = nil, y = nil, save = false)
     super [{
-      id: Sottolio::get(@id),
-       x: x || @x,
-       y: y || @y
+      src: @image,
+        x: x || @x,
+        y: y || @y
     }]
+
+    @x = x if save
+    @y = y if save
+  end
+
+  def out?
+    (@width + @x) < 0 || (@x + width) > 1276
+  end
+
+  def fade_out(pre_callback = nil, callback = nil, position = :right, speed = 1)
+    move = -> {
+      unless out?
+        @x = @x + ((position == :left ? -1 : 1) * speed)
+        draw @x, @y, true
+        pre_callback.call if pre_callback
+      else
+        callback.call     if callback
+      end
+    }
+
+    `setInterval(move, 1)`
   end
 
 end

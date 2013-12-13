@@ -34,7 +34,10 @@ dialogue    :name      => 'Ambrogia',
             :text      => 'Don\'t tease me >:(',
             :if_not    => '#name# =~ /^[a-zA-Z]+$/'
 
-remove      :id        => 'Rosalinda'
+remove      :id        => 'Rosalinda',
+            :fade      => true,                                 # apply a fade out animation to left with speed set to 1.7
+            :position  => :left,
+            :speed     => 1.7
 
 choice      :name      => 'Ambrogia',
             :text      => 'How do you feel?',

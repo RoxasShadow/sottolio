@@ -27,18 +27,17 @@ class ImageManager
     @images[image.id.to_sym] = image
   end
 
-  def remove(id)
-    @images.delete id.to_sym
-    @images.each_value &:draw
+  def remove(id, fade = false, position = nil, speed = nil)
+    redraw = -> { @images.each_value &:draw }
+    delete = -> { @images.delete id.to_sym; @images.each_value &:draw }
+    if fade
+      @images[id.to_sym].fade_out redraw, delete, position, speed
+    else
+      delete.call
+    end
   end
 
-  def append_to_html(id)
-    @images[id.to_sym].save
-  end
-    alias_method :write, :append_to_html
-    alias_method :save,  :append_to_html
-
-  def draw(id)
-    @images[id.to_sym].draw
+  def draw(id, x = nil, y = nil)
+    @images[id.to_sym].draw x, y, x && y
   end
 end

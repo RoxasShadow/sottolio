@@ -40,6 +40,10 @@ class Canvas
     `#@canvas.quadraticCurveTo(cpx, cpy, x, y)`
   end
 
+  def global_alpha=(opacity)
+    `#@canvas.globalAlpha = opacity`
+  end
+
   def clear_rect(x, y, width, height)
     `#@canvas.clearRect(x, y, width, height)`
   end
@@ -66,14 +70,14 @@ class Canvas
   end
 
   def draw(ary)
-    ary.each { |a|
-      draw_image a[:id], a[:x], a[:y]
+    ary.each { |image|
+      draw_image image[:src], image[:x], image[:y]
     }
   end
 
   def draw_image(*args)
     image = args.shift
-    x, y, w, h = args
+    x, y, width, height = args
     `#@canvas.drawImage(image, x, y)`
   end
 

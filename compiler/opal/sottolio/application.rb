@@ -62,18 +62,16 @@ next_dialogue = -> {
         next_dialogue.call
       when :background
         return next_dialogue.call unless current[:background].true? database
-        image_manager.add  Background.new(canvas_id, current[:background][:resource], current[:background][:id], 'asset')
-        image_manager.save current[:background][:id]
+        image_manager.add  Background.new(canvas_id, current[:background][:resource], current[:background][:id])
         image_manager.draw current[:background][:id]
         next_dialogue.call
       when :character
         return next_dialogue.call unless current[:character].true? database
-        image_manager.add  Character.new(canvas_id, current[:character][:resource], current[:character][:id], 'asset', current[:character][:x], current[:character][:y])
-        image_manager.save current[:character][:id]
-        image_manager.draw current[:character][:id]
+        image_manager.add  Character.new(canvas_id,  current[:character][:resource], current[:character][:id])
+        image_manager.draw current[:character][:id], current[:character][:x],        current[:character][:y]
         next_dialogue.call
       when :remove
-        image_manager.remove current[:remove][:id]
+        image_manager.remove current[:remove][:id], current[:remove][:fade], current[:remove][:position], current[:remove][:speed]
         next_dialogue.call
       when :dialogue
         return next_dialogue.call unless current[:dialogue].true? database
