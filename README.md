@@ -23,4 +23,4 @@ $ cd ../game
 
 You should be able to run `index.html` in your favorite web browser.
 
-The [demo](http://www.giovannicapuano.net/sottolio/) is available too.
+The [demo](http://www.giovannicapuano.net/sottolio/) is available. As well the [video](http://www.youtube.com/watch?v=djV_Z5OeBmg&feature=youtu.be) too.
