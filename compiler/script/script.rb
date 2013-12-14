@@ -6,7 +6,7 @@ background  :id        => 'city',                               # it's the place
 play_sound  :id        => 'background_theme',
             :resource  => 'resources/sounds/Classmate.m4a',
             :loop      => true,
-            :volume    => 0.0001                                # 0.0 - 1.0
+            :volume    => 0.5                                   # 0.0 - 1.0
 
 character   :id        => 'Rosalinda',
             :resource  => 'resources/characters/rosalinda.png',
