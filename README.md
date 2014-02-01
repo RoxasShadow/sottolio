@@ -8,8 +8,8 @@ Porting of [Sottaceto](https://github.com/RoxasShadow/Sottaceto) in javascript w
 
 Just like Sottaceto, sottolio is a game engine to make in a simple way visual novels for andr—your internet browser. Games written with sottolio run everywhere, you only need an internet browser which supports javascript and HTML5.
 
-The script (you can find it in `compiler/script`) is very self-explanatory, even more than Android's XML.
-Backgrounds, musics and the other stuff are splitted in the respective folders in `game/resources/`.
+The script (you can find it in `compiler/script`) is very self-explanatory, even more than Sottaceto's XML.
+Backgrounds, musics and the other stuff are divided in the respective folders in `game/resources/`.
 
 Example
 ========
