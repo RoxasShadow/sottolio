@@ -1,5 +1,5 @@
 (@scripts ||= []) << Proc.new do
-background  :id        => 'city',                               # it's the placeholder for remove
+background  :id        => 'city',                               # it's the placeholder for #remove
             :resource  => 'resources/backgrounds/city.jpg'
             
 
@@ -35,7 +35,7 @@ dialogue    :name      => 'Ambrogia',
             :if_not    => '#name# =~ /^[a-zA-Z]+$/'
 
 remove      :id        => 'Rosalinda',
-            :animation => :slide,                                 # apply a slide animation to left with speed set to 1.7
+            :animation => :slide,                               # apply a slide animation to the left
             :to        => :left,
             :speed     => 1.7
 
