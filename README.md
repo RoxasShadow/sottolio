@@ -28,5 +28,7 @@ The [demo](http://www.giovannicapuano.net/sottolio/) is also available in the we
 FAQ
 ===
 **Q**: I can't see one or more assets (girls, images, sounds or whatever)
-
 *R*: This is a well known bug. Please refresh the page.
+
+**Q**: I have problems with $browser (with $browser != Firefox)
+*R*: Currently Fiefox is the only stable browser where sottolio runs correctly. This definitely is considered a well known bug.
