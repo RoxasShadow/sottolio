@@ -21,7 +21,7 @@ module Sottolio
     def initialize(element, hash = nil, lock = nil)
       super element, hash
 
-      @lock = lock || ::Lock.new
+      @lock = lock || Lock.new
     end
 
     def get_choice(database, options, key, on_success)

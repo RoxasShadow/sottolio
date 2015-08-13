@@ -31,8 +31,13 @@ module Sottolio
           width: 300,
           padding: 8
         });
-        #@canvas_input.focus();
       }
+
+      focus
+    end
+
+    def focus
+      `#@canvas_input.focus();`
     end
 
     def value
