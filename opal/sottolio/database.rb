@@ -16,38 +16,33 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
-class SoundManager
-  def initialize
-    @sounds = {}
-  end
+module Sottolio
+  class Database
+    def initialize
+      @db = {}
+    end
 
-  # Actually `id` can be interpreted as an index instead of a label referring to the name of the resource
-  def add(id, sound)
-    @sounds[id.to_sym] = sound
-  end
+    def add(key, value)
+      @db[key] = value
+    end
 
-  def remove(id)
-    stop id
-    @sounds.delete id
-  end
+    def delete(key)
+      @db.delete key
+    end
 
-  def play(id)
-    @sounds[id.to_sym].play
-  end
+    def delete_if(key, &block)
+      @db.delete_if key, &block
+    end
 
-  def pause(id)
-    @sounds[id.to_sym].pause
-  end
+    def get(key)
+      @db[key]
+    end
 
-  def stop(id)
-    @sounds[id.to_sym].stop
-  end
-
-  def mute(id)
-    @sounds[id.to_sym].mute
-  end
-
-  def unmute(id)
-    @sounds[id.to_sym].unmute
+    def has?(key)
+      @db.include? key
+    end
+      alias_method :exist?,   :has?
+      alias_method :exists?,  :has?
+      alias_method :include?, :has?
   end
 end

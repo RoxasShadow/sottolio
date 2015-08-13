@@ -16,29 +16,4 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
-class ImageManager
-  attr_accessor :images
-
-  def initialize
-    @images = {}
-  end
-
-  def add(image)
-    @images[image.id.to_sym] = image
-  end
-
-  def remove(id, animation = :none, to = nil, speed = nil)
-    redraw = -> { @images.each_value &:draw }
-    delete = -> { @images.delete id.to_sym; @images.each_value &:draw }
-
-    if animation == :slide
-      @images[id.to_sym].slide redraw, delete, to, speed
-    else
-      delete.call
-    end
-  end
-
-  def draw(id, x = nil, y = nil)
-    @images[id.to_sym].draw x, y, x && y
-  end
-end
+require 'sottolio/sottolio'

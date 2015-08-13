@@ -16,25 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
-require 'opal'
-
-require 'sottolio/sottolio'
-require 'sottolio/script'
-require 'sottolio/lock'
-require 'sottolio/database'
-require 'sottolio/utils'
-
-require 'sottolio/wrapper/canvas'
-require 'sottolio/wrapper/canvas/canvas_input'
-require 'sottolio/wrapper/canvas/canvas_text'
-require 'sottolio/wrapper/canvas/canvas_button'
-
-require 'sottolio/wrapper/image'
-require 'sottolio/wrapper/background'
-require 'sottolio/wrapper/character'
-require 'sottolio/image_manager'
-
-require 'sottolio/wrapper/sound'
-require 'sottolio/sound_manager'
-
-require 'sottolio/application'
+module Sottolio
+  class Character < Image; end
+end

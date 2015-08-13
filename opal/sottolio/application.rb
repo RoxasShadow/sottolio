@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
+include Sottolio
 
 @scripts = []
 require 'script'
@@ -25,8 +26,8 @@ if @scripts.empty?
   return
 end
 
-canvas_id = Sottolio::get 'game'
-go_next   = Sottolio::get 'next'
+canvas_id = Sottolio.get 'game'
+go_next   = Sottolio.get 'next'
 canvas    = Canvas.new canvas_id
 
 database  = Database.new

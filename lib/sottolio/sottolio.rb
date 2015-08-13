@@ -16,4 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
-class Character < Image; end
+require 'opal'
+require 'opal/util'
+
+Opal.append_path File.expand_path('../../../opal', __FILE__)

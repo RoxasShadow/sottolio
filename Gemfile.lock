@@ -1,16 +1,20 @@
-GEM
-  remote: http://rubygems.org/
+PATH
+  remote: .
   specs:
-    addressable (2.3.8)
+    sottolio (0.1)
+      opal (~> 0.8)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
     hike (1.2.3)
-    launchy (2.4.3)
-      addressable (~> 2.3)
     opal (0.8.0)
       hike (~> 1.2)
       sourcemap (~> 0.1.0)
       sprockets (~> 3.1)
       tilt (>= 1.4)
     rack (1.6.4)
+    rake (10.4.2)
     sourcemap (0.1.1)
     sprockets (3.3.0)
       rack (~> 1.0)
@@ -20,8 +24,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  launchy
-  opal (~> 0.8)
+  rake (~> 10.4)
+  sottolio!
 
 BUNDLED WITH
    1.10.5

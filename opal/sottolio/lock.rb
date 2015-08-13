@@ -16,24 +16,26 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
-class Lock
-  def initialize
-    free!
-  end
+module Sottolio
+  class Lock
+    def initialize
+      free!
+    end
 
-  def locked?
-    @lock == true
-  end
+    def locked?
+      @lock == true
+    end
 
-  def free?
-    not locked?
-  end
+    def free?
+      not locked?
+    end
 
-  def lock!
-    @lock = true
-  end
+    def lock!
+      @lock = true
+    end
 
-  def free!
-    @lock = false
+    def free!
+      @lock = false
+    end
   end
 end

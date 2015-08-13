@@ -16,38 +16,40 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
-class Sound
-  attr_accessor :sound
+module Sottolio
+  class SoundManager
+    def initialize
+      @sounds = {}
+    end
 
-  def initialize(sounds, loop = false, volume = 0.5, on_end = -> {})
-    @sound = %x{
-      new Howl({
-        urls:     #{[sounds].flatten},
-        autoplay: false,
-        loop:     loop,
-        volume:   volume,
-        onend:    on_end
-      })
-    }
-  end
+    # Actually `id` can be interpreted as an index instead of a label referring to the name of the resource
+    def add(id, sound)
+      @sounds[id.to_sym] = sound
+    end
 
-  def play
-    `#@sound.play()`
-  end
+    def remove(id)
+      stop id
+      @sounds.delete id
+    end
 
-  def pause
-    `#@sound.pause()`
-  end
+    def play(id)
+      @sounds[id.to_sym].play
+    end
 
-  def stop
-    `#@sound.stop()`
-  end
+    def pause(id)
+      @sounds[id.to_sym].pause
+    end
 
-  def mute
-    `#@sound.mute()`
-  end
+    def stop(id)
+      @sounds[id.to_sym].stop
+    end
 
-  def unmute
-    `#@sound.unmute()`
+    def mute(id)
+      @sounds[id.to_sym].mute
+    end
+
+    def unmute(id)
+      @sounds[id.to_sym].unmute
+    end
   end
 end

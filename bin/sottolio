@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 #--
 # Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
@@ -16,4 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
-class Background < Image; end
+require 'sottolio'
+
+abort 'Usage: sottolio <scripts> <output>' if ARGV.length != 2
+
+Opal.append_path ARGV[0]
+
+build = Opal::Builder.build('sottolio').to_s
+
+File.write "#{ARGV[1]}.js", build
+File.write "#{ARGV[1]}.min.js", Opal::Util.uglify(build)

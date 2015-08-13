@@ -1,4 +1,0 @@
-source 'http://rubygems.org'
-
-gem 'opal', '~> 0.8'
-gem 'launchy'
