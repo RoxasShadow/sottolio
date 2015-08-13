@@ -27,7 +27,8 @@ module Sottolio
           autoplay: false,
           loop:     loop,
           volume:   volume,
-          onend:    on_end
+          onend:    on_end,
+          buffer:   true
         })
       }
     end
