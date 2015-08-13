@@ -21,6 +21,7 @@ require 'sottolio'
 
 abort 'Usage: sottolio <scripts> <output>' if ARGV.length != 2
 
+Opal.append_path 'opal'
 Opal.append_path ARGV[0]
 
 build = Opal::Builder.build('sottolio').to_s
