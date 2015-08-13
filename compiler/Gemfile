@@ -1,4 +1,4 @@
 source 'http://rubygems.org'
 
-gem 'opal'
-gem 'opal-sprockets'
+gem 'opal', '~> 0.8'
+gem 'launchy'

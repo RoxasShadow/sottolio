@@ -1,12 +1,33 @@
 require 'bundler'
 Bundler.require
 
+task default: [ :build, :run ]
+
 desc 'Build the script to game/sottolio.js'
 task :build do
-  env = Opal::Environment.new
-  env.append_path 'opal'
+  builder = Opal::Builder.new
+  builder.processed.map { |asset| [asset.filename, asset.to_s] }
+
+  Opal.append_path 'opal'
+  Opal.append_path 'script'
 
   File.open('../game/sottolio.js', 'w+') do |out|
-    out << env['application'].to_s
+    out << Opal::Builder.build('application').to_s
+  end
+end
+
+desc 'Run the compiled game in your browser'
+task :run do
+  path = File.expand_path '../game/index.html'
+  Launchy.open path
+end
+
+desc 'Minify game/sottolio.js. Please run `npm install -g uglify-js` before than this.'
+task :minify do
+  require 'opal/util'
+
+  File.open('../game/sottolio.min.js', 'w+') do |out|
+    script = File.read('../game/sottolio.js')
+    out << Opal::Util.uglify(script)
   end
 end

@@ -1,0 +1,27 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    addressable (2.3.8)
+    hike (1.2.3)
+    launchy (2.4.3)
+      addressable (~> 2.3)
+    opal (0.8.0)
+      hike (~> 1.2)
+      sourcemap (~> 0.1.0)
+      sprockets (~> 3.1)
+      tilt (>= 1.4)
+    rack (1.6.4)
+    sourcemap (0.1.1)
+    sprockets (3.3.0)
+      rack (~> 1.0)
+    tilt (2.0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  launchy
+  opal (~> 0.8)
+
+BUNDLED WITH
+   1.10.5
