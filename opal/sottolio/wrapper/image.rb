@@ -40,8 +40,7 @@ module Sottolio
           y: y || @y
       }]
 
-      @x = x if save
-      @y = y if save
+      @x, @y = x, y if save
     end
 
     def out?

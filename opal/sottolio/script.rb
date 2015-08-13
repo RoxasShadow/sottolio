@@ -16,70 +16,26 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
+require 'forwardable'
+
 module Sottolio
   class Script
-    include Enumerable
+    extend Forwardable
 
     # TODO: Rid of unused methods
     def initialize(scripts = [])
       @var = []
       scripts.each { |p| self << p }
-    end
-
-    def each(&block)
-      @var.each(&block)
-    end
-
-    def append(block)
-      instance_eval &block
-    end
-      alias_method :<<, :append
-
-    def has?(type)
-      @var.any? { |h| h.keys.first.to_sym == type.to_sym }
-    end
-      alias_method :include?, :has?
-
-    def length(type = nil)
-      if block_given?
-        @var.count &block
-      elsif type == nil
-        @var.count
-      else
-        @var.count  { |h| h.keys.first.to_sym == type.to_sym }
-      end
-    end
-      alias_method :count, :length
-      alias_method :count, :size
-
-    def get(type)
-      @var.select { |h| h.keys.first.to_sym == type.to_sym }
-    end
-
-    def first
-      @var.first
-    end
-
-    def last
-      @var.last
-    end
-
-    def pop
-      @var.pop
-    end
-
-    def reverse
-      @var.reverse
-    end
-
-    def reverse!
       @var.reverse!
     end
 
-    def to_s
-      @var.inspect
+    def <<(block)
+      instance_eval &block
     end
 
+    def_delegators :@var, :pop, :any?
+
+    # Script's commands
     def method_missing(m, *args, &block)
       if args.any?
         args = args.first if args.length == 1
