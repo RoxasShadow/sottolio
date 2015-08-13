@@ -19,12 +19,9 @@
 include Sottolio
 
 @scripts = []
-require 'script'
 
-if @scripts.empty?
-  puts 'No scripts found.'
-  return
-end
+require 'script'
+abort 'No scripts found.' if @scripts.empty?
 
 canvas_id = Sottolio.get 'game'
 go_next   = Sottolio.get 'next'
@@ -32,7 +29,6 @@ canvas    = Canvas.new canvas_id
 
 database  = Database.new
 scripts   = Script.new @scripts
-scripts.reverse!
 
 config = {
   canvas_id:   'game',
