@@ -1,5 +1,5 @@
 #--
-# Copyright(C) 2013 Giovanni Capuano <webmaster@giovannicapuano.net>
+# Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
 # This file is part of sottolio.
 #
@@ -17,16 +17,17 @@
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
 class String
+  # TODO: Find a better name for this (tl;dr replace variables with real values)
   def apply(database, pattern = /\#(.+)\#/)
-    r = ''
+    r = '' # we cannot #tap because of frozen strings
     self.split(pattern).each { |s|
-      r += (database.has?(s) ? database.get(s) : s)
+      r += database.has?(s) ? database.get(s) : s
     }
     r
   end
 
   def filename
-    self.split('/').last
+    self.split(?/).last
   end
 
   def to_regex
@@ -35,19 +36,20 @@ class String
 end
 
 class Hash
+  # TODO: Find a better name for this (tl;dr eval conditional keys in the script's commands)
   def true?(database)
     return true unless self.include?(:if) || self.include?(:if_not)
 
     res = []
     sym = self.include?(:if) ? :if : :if_not
-    [self[sym]].flatten.each { |c|
-      statement = c.apply(database).split(/(.+)(==|!=|=~)(.+)/).delete_if { |s| s.strip.empty? }.map { |s| s.strip }
+    [self[sym]].flatten.each { |c| # i.e.: [ '#feel# == good', '#name# == Patrizio' ]
+      statement = c.apply(database).split(/(.+)(==|!=|=~)(.+)/).delete_if { |s| s.strip.empty? }.map(&:strip)
       eval = case statement[1] # #send won't work with !=
         when '==' then statement[0] == statement[2]
         when '!=' then statement[0] != statement[2]
         when '=~' then statement[0] =~ statement[2].to_regex
       end
-      res << eval
+      res << eval # actually this is totally not safe
     }
     res << res.inject { |sum, x| sum && x }
     return sym == :if ? res.last : !res.last

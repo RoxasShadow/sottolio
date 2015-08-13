@@ -1,5 +1,5 @@
 #--
-# Copyright(C) 2013 Giovanni Capuano <webmaster@giovannicapuano.net>
+# Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
 # This file is part of sottolio.
 #
@@ -17,12 +17,11 @@
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
 class CanvasText < Canvas
-  attr_accessor :canvas_text
-
   def initialize(element, hash = nil)
     super element, '2d'
 
     @canvas_id = element
+
     %x{
       #@canvas_text = new CanvasText;
     }
@@ -33,10 +32,10 @@ class CanvasText < Canvas
   def config(hash)
     %x{
       #@canvas_text.config({
-        canvasId   : #{hash[:canvas_id]},
-        fontFamily : #{hash[:font_family]},
-        fontSize   : #{hash[:font_size]},
-        fontColor  : #{hash[:font_color]}
+        canvasId:   #{hash[:canvas_id]},
+        fontFamily: #{hash[:font_family]},
+        fontSize:   #{hash[:font_size]},
+        fontColor:  #{hash[:font_color]}
       });
     }
   end
@@ -44,10 +43,10 @@ class CanvasText < Canvas
   def draw_text(hash)
     %x{
       #@canvas_text.drawText({
-        x        : #{hash[:x]},
-        y        : #{hash[:y]},
-        text     : #{hash[:text]},
-        boxWidth : #{hash[:box_width] || '130px'}
+        x: #{hash[:x]},
+        y: #{hash[:y]},
+        text: #{hash[:text]},
+        boxWidth: #{hash[:box_width] || '130px'}
       });
     }
   end

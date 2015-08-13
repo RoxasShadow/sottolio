@@ -1,5 +1,5 @@
 #--
-# Copyright(C) 2013 Giovanni Capuano <webmaster@giovannicapuano.net>
+# Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
 # This file is part of sottolio.
 #
@@ -17,8 +17,6 @@
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
 class Database
-  attr_accessor :db
-
   def initialize
     @db = {}
   end

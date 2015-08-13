@@ -1,5 +1,5 @@
 #--
-# Copyright(C) 2013 Giovanni Capuano <webmaster@giovannicapuano.net>
+# Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
 # This file is part of sottolio.
 #
@@ -17,13 +17,13 @@
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
 module Sottolio
+  class << self
+    def get(id)
+      `document.getElementById(id)`
+    end
 
-  def Sottolio.get(id)
-    `document.getElementById(id)`
+    def add_listener(event, element, callback)
+      `element.addEventListener(event, callback, false)`
+    end
   end
-
-  def Sottolio.add_listener(event, element, callback)
-    `element.addEventListener(event, callback, false)`
-  end
-
 end

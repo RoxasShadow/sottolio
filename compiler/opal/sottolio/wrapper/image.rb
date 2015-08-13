@@ -1,5 +1,5 @@
 #--
-# Copyright(C) 2013 Giovanni Capuano <webmaster@giovannicapuano.net>
+# Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
 # This file is part of sottolio.
 #
@@ -21,9 +21,10 @@ class Image < Canvas
 
   def initialize(element, image, id, x = 0, y = 0)
     super element
-    
-    @image = `new Image()`
-      `#@image.src = image`
+
+      @image     = `new Image()`
+    `#@image.src = image`
+
     @id     = id
     @x      = x
     @y      = y
@@ -53,11 +54,10 @@ class Image < Canvas
         draw @x, @y, true
         pre_callback.call if pre_callback
       else
-        callback.call     if callback
+        callback.call if callback
       end
     }
 
     `setInterval(move, 1)`
   end
-
 end

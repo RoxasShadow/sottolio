@@ -1,5 +1,5 @@
 #--
-# Copyright(C) 2013 Giovanni Capuano <webmaster@giovannicapuano.net>
+# Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
 # This file is part of sottolio.
 #
@@ -18,12 +18,11 @@
 #++
 class Script
   include Enumerable
-  attr_accessor :var
 
-  def initialize(procs = [])
+  # TODO: Rid of unused methods
+  def initialize(scripts = [])
     @var = []
-    instance_eval &block         if block_given?
-    procs.each { |p| self << p } if procs.any?
+    scripts.each { |p| self << p }
   end
 
   def each(&block)
@@ -36,11 +35,11 @@ class Script
     alias_method :<<, :append
 
   def has?(type)
-    @var.any?   { |h| h.keys.first.to_sym == type.to_sym }
+    @var.any? { |h| h.keys.first.to_sym == type.to_sym }
   end
     alias_method :include?, :has?
 
-  def how_many?(type = nil)
+  def length(type = nil)
     if block_given?
       @var.count &block
     elsif type == nil
@@ -49,14 +48,11 @@ class Script
       @var.count  { |h| h.keys.first.to_sym == type.to_sym }
     end
   end
-    alias_method :count, :how_many?
+    alias_method :count, :length
+    alias_method :count, :size
 
   def get(type)
     @var.select { |h| h.keys.first.to_sym == type.to_sym }
-  end
-
-  def get_all
-    @var
   end
 
   def first

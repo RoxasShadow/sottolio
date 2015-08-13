@@ -1,5 +1,5 @@
 #--
-# Copyright(C) 2013 Giovanni Capuano <webmaster@giovannicapuano.net>
+# Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
 # This file is part of sottolio.
 #
@@ -16,26 +16,29 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
-class Block
-  attr_accessor :block
+class ImageManager
+  attr_accessor :images
 
   def initialize
-    @block = false
+    @images = {}
   end
 
-  def blocked?
-    @block
+  def add(image)
+    @images[image.id.to_sym] = image
   end
 
-  def free?
-    !@block
+  def remove(id, animation = :none, to = nil, speed = nil)
+    redraw = -> { @images.each_value &:draw }
+    delete = -> { @images.delete id.to_sym; @images.each_value &:draw }
+
+    if animation == :slide
+      @images[id.to_sym].slide redraw, delete, to, speed
+    else
+      delete.call
+    end
   end
 
-  def block!
-    @block = true
-  end
-
-  def free!
-    @block = false
+  def draw(id, x = nil, y = nil)
+    @images[id.to_sym].draw x, y, x && y
   end
 end

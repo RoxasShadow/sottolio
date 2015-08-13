@@ -1,5 +1,5 @@
 #--
-# Copyright(C) 2013 Giovanni Capuano <webmaster@giovannicapuano.net>
+# Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
 # This file is part of sottolio.
 #
@@ -16,39 +16,24 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
-class SoundManager
-  attr_accessor :sounds
-
+class Lock
   def initialize
-    @sounds = {}
+    free!
   end
 
-  def add(id, sound)
-    @sounds[id.to_sym] = sound
+  def locked?
+    @lock == true
   end
 
-  def remove(id)
-    stop id
-    @sounds.delete id
+  def free?
+    not locked?
   end
 
-  def play(id)
-    @sounds[id.to_sym].play
+  def lock!
+    @lock = true
   end
 
-  def pause(id)
-    @sounds[id.to_sym].pause
-  end
-
-  def stop(id)
-    @sounds[id.to_sym].stop
-  end
-
-  def mute(id)
-    @sounds[id.to_sym].mute
-  end
-
-  def unmute(id)
-    @sounds[id.to_sym].unmute
+  def free!
+    @lock = false
   end
 end

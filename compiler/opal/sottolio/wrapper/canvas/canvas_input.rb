@@ -1,5 +1,5 @@
 #--
-# Copyright(C) 2013 Giovanni Capuano <webmaster@giovannicapuano.net>
+# Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
 # This file is part of sottolio.
 #
@@ -17,13 +17,11 @@
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
 class CanvasInput
-  attr_accessor :canvas_input, :database, :key, :destroyed
-
   def initialize(id, database, key, text = '', x = 10, y = 800)
     @database  = database
     @key       = key
     @destroyed = false
-    
+
     %x{
       #@canvas_input = new CanvasText(id, {
         x: x,
@@ -36,16 +34,21 @@ class CanvasInput
     }
   end
 
-  def get
+  def value
     `#@canvas_input.value`
   end
 
-  def fill?
-    `#@canvas_input.value.length > 0`
+  def empty?
+    `#@canvas_input.value.length == 0`
+  end
+
+  def save
+    @database.add @key, value
   end
 
   def destroy
     @destroy = true
+
     %x{
       #@canvas_input.unfocus();
       #@canvas_input.refresh = null;
@@ -54,17 +57,15 @@ class CanvasInput
     }
   end
 
-  def alive?
-    !@destroy
+  def present?
+    not destroyed?
   end
 
   def destroyed?
     @destroy
   end
 
-  def save_and_destroy!
-    @database.add @key, get
-    destroy
-    nil
+  def save_and_destroy
+    save && destroy
   end
 end

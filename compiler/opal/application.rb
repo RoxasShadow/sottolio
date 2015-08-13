@@ -1,5 +1,5 @@
 #--
-# Copyright(C) 2015 Giovanni Capuano <webmaster@giovannicapuano.net>
+# Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
 # This file is part of sottolio.
 #
@@ -19,23 +19,23 @@
 require 'opal'
 
 require 'sottolio/sottolio'
-require 'sottolio/dsl'
-require 'sottolio/block'
+require 'sottolio/script'
+require 'sottolio/lock'
 require 'sottolio/database'
 require 'sottolio/utils'
 
 require 'sottolio/wrapper/canvas'
-require 'sottolio/wrapper/canvas/canvasinput'
-require 'sottolio/wrapper/canvas/canvastext'
-require 'sottolio/wrapper/canvas/canvasbutton'
+require 'sottolio/wrapper/canvas/canvas_input'
+require 'sottolio/wrapper/canvas/canvas_text'
+require 'sottolio/wrapper/canvas/canvas_button'
 
 require 'sottolio/wrapper/image'
 require 'sottolio/wrapper/background'
 require 'sottolio/wrapper/character'
-require 'sottolio/imagemanager'
+require 'sottolio/image_manager'
 
 require 'sottolio/wrapper/sound'
-require 'sottolio/soundmanager'
+require 'sottolio/sound_manager'
 
 require 'game'
 

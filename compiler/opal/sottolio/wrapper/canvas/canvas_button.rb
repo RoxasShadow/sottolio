@@ -1,5 +1,5 @@
 #--
-# Copyright(C) 2013 Giovanni Capuano <webmaster@giovannicapuano.net>
+# Copyright(C) 2013-2015 Giovanni Capuano <webmaster@giovannicapuano.net>
 #
 # This file is part of sottolio.
 #
@@ -17,15 +17,15 @@
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
 class CanvasButton < CanvasText
-  attr_accessor :block
-
-  def initialize(element, hash = nil, block = nil)
+  def initialize(element, hash = nil, lock = nil)
     super element, hash
-    @block = block || Sottolio::Block.new
+
+    @lock = lock || ::Lock.new
   end
 
   def get_choice(database, options, key, on_success)
-    @block.block!
+    @lock.lock!
+
     fill_style = 'rgba(200, 54, 54, 0.5)'
 
     rect = [
@@ -43,14 +43,21 @@ class CanvasButton < CanvasText
         :box_width => "#{r[:w]}px"
       })
 
-      Sottolio::add_listener :click, @canvas_id, -> (e) {
+      Sottolio.add_listener :click, @canvas_id, -> (e) {
         x = `e.pageX` - `#@canvas_id.offsetLeft`
         y = `e.pageY` - `#@canvas_id.offsetTop`
 
         if collides? r, x, y
           database.add key, options[i][:id]
-          rect.each { |tr| clear_rect tr[:x] - 10, tr[:y] - 10, tr[:w] + 20, tr[:h] + 15 }
-          @block.free!
+
+          rect.each { |tr|
+            clear_rect tr[:x] - 10,
+                       tr[:y] - 10,
+                       tr[:w] + 20,
+                       tr[:h] + 15
+          }
+
+          @lock.free!
 
           on_success.call
         end
