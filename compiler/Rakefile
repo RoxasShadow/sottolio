@@ -10,7 +10,7 @@ task :build do
   builder.processed.map { |asset| [asset.filename, asset.to_s] }
 
   Opal.append_path 'opal'
-  Opal.append_path 'script'
+  Opal.append_path 'scripts'
 
   File.open('../game/sottolio.js', 'w+') do |out|
     out << Opal::Builder.build('application').to_s

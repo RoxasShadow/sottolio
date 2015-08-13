@@ -1,7 +1,6 @@
 (@scripts ||= []) << Proc.new do
 background  :id        => 'city',                               # it's the placeholder for #remove
             :resource  => 'resources/backgrounds/city.jpg'
-            
 
 play_sound  :id        => 'background_theme',
             :resource  => 'resources/sounds/Classmate.m4a',
@@ -20,12 +19,12 @@ character   :id        => 'Ambrogia',
 
 dialogue    :name      => 'Ambrogia',                           # optional
             :text      => 'Hi!'
-            
+
 input       :name      => 'Ambrogia',
             :text      => 'My name is Ambrogia, and yours?',
             :id        => 'name',                               # the variable where the input will be saved
             :request   => 'Your name'
-            
+
 dialogue    :name      => 'Ambrogia',
             :text      => 'Oh, hai #name#!',
             :if        => '#name# =~ /^[a-zA-Z]+$/'
@@ -33,11 +32,6 @@ dialogue    :name      => 'Ambrogia',
 dialogue    :name      => 'Ambrogia',
             :text      => 'Don\'t tease me >:(',
             :if_not    => '#name# =~ /^[a-zA-Z]+$/'
-
-remove      :id        => 'Rosalinda',
-            :animation => :slide,                               # apply a slide animation to the left
-            :to        => :left,
-            :speed     => 1.7
 
 choice      :name      => 'Ambrogia',
             :text      => 'How do you feel?',
@@ -63,6 +57,8 @@ dialogue    :name      => 'Ambrogia',
             :text      => 'Ok, time to go, cya!'
 
 remove      :id        => 'Ambrogia'
+
+remove      :id        => 'Rosalinda'
 
 stop_sound  :id        => 'background_theme'
 end

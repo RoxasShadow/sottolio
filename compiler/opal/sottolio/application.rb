@@ -17,7 +17,10 @@
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-unless @scripts.is_a?(Array) && @scripts.any?
+@scripts = []
+require 'script'
+
+if @scripts.empty?
   puts 'No scripts found.'
   return
 end

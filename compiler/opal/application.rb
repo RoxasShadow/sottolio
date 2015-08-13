@@ -37,6 +37,4 @@ require 'sottolio/image_manager'
 require 'sottolio/wrapper/sound'
 require 'sottolio/sound_manager'
 
-require 'game'
-
 require 'sottolio/application'
