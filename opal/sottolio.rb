@@ -19,6 +19,7 @@
 require 'opal'
 
 require 'sottolio/sottolio'
+require 'sottolio/bootstrapper'
 require 'sottolio/script'
 require 'sottolio/lock'
 require 'sottolio/database'
