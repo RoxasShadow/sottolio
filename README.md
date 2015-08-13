@@ -1,26 +1,23 @@
 Sottolio - È sopraffino
 ========================
 
-Preamble
-========
+Porting of [Sottaceto](https://github.com/RoxasShadow/Sottaceto) in JavaScript written in Ruby thanks to Opal.
 
-Porting of [Sottaceto](https://github.com/RoxasShadow/Sottaceto) in javascript written in ruby with opal.
+Just like Sottaceto, sottolio is a game engine to create in with ease visual novels. These games run everywhere, you only need a~~~n internet browser which supports JavaScript and HTML5~~~ decent internet browser.
 
-Just like Sottaceto, sottolio is a game engine to make in a simple way visual novels for andr—your internet browser. Games written with sottolio run everywhere, you only need an internet browser which supports javascript and HTML5.
+The scripts (check `compiler/scripts`) are pretty self-explanatory (even more than Sottaceto's ones, actually).
 
-The script (you can find it in `compiler/script`) is very self-explanatory, even more than Sottaceto's XML.
-Backgrounds, musics and the other stuff are divided in the respective folders in `game/resources/`.
+Backgrounds, musics, and other stuff are kept inside `game/resources/`.
 
-Example
-========
+How to run
+==========
 
 ```
 $ cd compiler
 $ bundle install
-$ rake build
-$ cd ../game
+$ rake
 ```
 
-You should be able to run `index.html` in your favorite web browser.
+In some seconds your web browser will be opened with the game ready to be played.
 
-The [demo](http://www.giovannicapuano.net/sottolio/) is available. As well the [video](http://www.youtube.com/watch?v=djV_Z5OeBmg&feature=youtu.be) too.
+The [demo](http://www.giovannicapuano.net/sottolio/) is also available in the web, as well the [video gameplay](http://www.youtube.com/watch?v=djV_Z5OeBmg&feature=youtu.be) (it's a bit old tho).
