@@ -17,5 +17,5 @@
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
 module Sottolio
-  VERSION = '0.1.2'
+  VERSION = '0.1.3'
 end
