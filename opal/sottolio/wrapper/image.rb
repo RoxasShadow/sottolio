@@ -31,8 +31,8 @@ module Sottolio
       @y      = y
     end
 
-    def on_load(callbac)
-      `#@image.onload = callbac`
+    def on_load(callback)
+      `#@image.onload = callback`
     end
 
     def draw_image(*args)
