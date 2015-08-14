@@ -70,18 +70,6 @@ module Sottolio
       x > rect[:x] && x < rect[:x] + rect[:w] && y > rect[:y] && y < rect[:y] + rect[:h]
     end
 
-    def draw(ary)
-      ary.each { |image|
-        draw_image image[:src], image[:x], image[:y]
-      }
-    end
-
-    def draw_image(*args)
-      image = args.shift
-      x, y, width, height = args
-      `#@canvas.drawImage(image, x, y)`
-    end
-
     def clear
       fill_style = '#000'
       round_rect 2, 725, 1276, 120

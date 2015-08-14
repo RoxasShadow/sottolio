@@ -19,6 +19,8 @@
 module Sottolio
   class Lock
     def initialize
+      @callbacks    = []
+      @bootstrapped = false
       free!
     end
 
@@ -36,6 +38,16 @@ module Sottolio
 
     def free!
       @lock = false
+      @callbacks.shift.call unless @callbacks.empty?
+    end
+
+    def on_free(&block)
+      unless locked? && @bootstrapped
+        @bootstrapped = true
+        block.call
+      else
+        @callbacks << block
+      end
     end
   end
 end

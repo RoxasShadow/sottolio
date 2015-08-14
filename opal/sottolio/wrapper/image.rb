@@ -23,22 +23,29 @@ module Sottolio
     def initialize(element, image, id, x = 0, y = 0)
       super element
 
-        @image     = `new Image()`
+      @image = `new Image()`
       `#@image.src = image`
 
       @id     = id
       @x      = x
       @y      = y
-      @width  = `#@image.width`
-      @height = `#@image.height`
+    end
+
+    def on_load(callbac)
+      `#@image.onload = callbac`
+    end
+
+    def draw_image(*args)
+      image = args.shift
+      x, y, width, height = args
+      `#@canvas.drawImage(image, x, y)`
     end
 
     def draw(x = nil, y = nil, save = false)
-      super [{
-        src: @image,
-          x: x || @x,
-          y: y || @y
-      }]
+      draw_image @image, x || @x, y || @y
+
+      @width  = `#@image.width`
+      @height = `#@image.height`
 
       @x, @y = x, y if save
     end

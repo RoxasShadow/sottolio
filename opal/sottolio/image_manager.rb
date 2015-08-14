@@ -18,10 +18,9 @@
 #++
 module Sottolio
   class ImageManager
-    attr_accessor :images
-
     def initialize
       @images = {}
+      @lock   = Lock.new
     end
 
     def add(image)
@@ -40,7 +39,20 @@ module Sottolio
     end
 
     def draw(id, x = nil, y = nil)
-      @images[id.to_sym].draw x, y, x && y
+      image = @images[id.to_sym]
+
+      # We need to load images by keeping given priority
+      # (i.e. bg must loaded as first so characters appear on top).
+      @lock.on_free do
+        p "#{id} queued"
+        @lock.lock!
+
+        image.on_load -> {
+          p "#{id} loaded"
+          @lock.free!
+          image.draw x, y, x && y
+        }
+      end
     end
   end
 end
