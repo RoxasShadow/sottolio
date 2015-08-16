@@ -24,8 +24,3 @@ sottolio will generate `example/game/sottolio.js` and `example/game/sottolio.min
 You're now ready to open `example/game/index.html` in your browser!
 
 The [demo](http://www.giovannicapuano.net/sottolio/) is also available in the web, as well the [video gameplay](http://www.youtube.com/watch?v=djV_Z5OeBmg&feature=youtu.be) (it's a bit old tho).
-
-FAQ
-===
-**Q**: I can't see one or more assets (girls, images, sounds or whatever) on Chrome
-*R*: This is a well known bug. Please refresh the page thrice.
