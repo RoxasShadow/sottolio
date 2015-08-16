@@ -18,18 +18,18 @@
 #++
 module Sottolio
   class CanvasInput
-    def initialize(id, database, key, text = '', x = 12, y = 800)
+    def initialize(id, database, key, text = '', x = 500, y = 800)
       @database  = database
       @key       = key
       @destroyed = false
 
       %x{
         #@canvas_input = new CanvasText(id, {
-          x: x,
-          y: y,
+          x:           x,
+          y:           y,
           placeHolder: text,
-          width: 300,
-          padding: 8
+          width:       300,
+          padding:     8
         });
       }
 
