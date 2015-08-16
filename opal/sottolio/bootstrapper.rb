@@ -27,8 +27,9 @@ module Sottolio
       go_next   = Sottolio.get 'next'
       canvas    = Canvas.new canvas_id
 
-      database  = Database.new
-      scripts   = Script.new @scripts
+      database = Database.new
+      scripts  = Script.new @scripts
+      Utils.database = database
 
       config = {
         canvas_id:   'game',
@@ -44,17 +45,26 @@ module Sottolio
       image_manager = ImageManager.new
       input         = nil
 
+      previous_dialogue = nil
       next_dialogue = -> {
         if lock.free? && (!input || input.destroyed? || (input.present? && !input.empty?)) && scripts.any?
-          input.save_and_destroy if input.is_a?(CanvasInput) && input.present?
+          if input.is_a?(CanvasInput) && input.present?
+            input.save_and_destroy
+
+            if !input.valid? && !previous_dialogue.nil?
+              previous_dialogue[:input][:failed] = true
+              scripts << previous_dialogue
+            end
+          end
 
           canvas.fill_style = '#fff'
 
-          script          = scripts.pop
-          current_command = script.keys.first
+          script            = scripts.pop
+          previous_dialogue = script
+          current_command   = script.keys.first
           case current_command
           when :play_sound
-            if script[:play_sound].true? database
+            if Utils.command_conditions_passes? script[:play_sound]
               sound = Sound.new script[:play_sound][:resource], script[:play_sound][:loop], script[:play_sound][:volume]
               sound_manager.add script[:play_sound][:id], sound
               sound_manager.play script[:play_sound][:id]
@@ -62,13 +72,13 @@ module Sottolio
 
             next_dialogue.call
           when :stop_sound
-            if script[:stop_sound].true? database
+            if Utils.command_conditions_passes? script[:stop_sound]
               sound_manager.stop script[:stop_sound][:id]
             end
 
             next_dialogue.call
           when :background
-            if script[:background].true? database
+            if Utils.command_conditions_passes? script[:background]
               background = Background.new canvas_id, script[:background][:resource], script[:background][:id]
               image_manager.add background
               image_manager.draw script[:background][:id]
@@ -76,7 +86,7 @@ module Sottolio
 
             next_dialogue.call
           when :character
-            if script[:character].true? database
+            if Utils.command_conditions_passes? script[:character]
               character = Character.new canvas_id, script[:character][:resource], script[:character][:id]
               image_manager.add character
               image_manager.draw script[:character][:id], script[:character][:x], script[:character][:y]
@@ -88,7 +98,7 @@ module Sottolio
 
             next_dialogue.call
           when :dialogue
-            if script[:dialogue].true? database
+            if Utils.command_conditions_passes? script[:dialogue]
               canvas.clear
 
               if script[:dialogue].include? :name
@@ -100,7 +110,7 @@ module Sottolio
               next_dialogue.call
             end
           when :input
-            if script[:input].true? database
+            if Utils.command_conditions_passes? script[:input]
               canvas.clear
 
               if script[:input].include? :name
@@ -109,12 +119,14 @@ module Sottolio
                 canvas_text.write script[:input][:text].apply(database)
               end
 
-              input = CanvasInput.new canvas_id, database, script[:input][:id], script[:input][:request].apply(database)
+              placeholder = (script[:input][:failed] == true ? script[:input][:on_fail] || 'Please check your input' : script[:input][:request]).apply(database)
+              input = CanvasInput.new canvas_id, database, script[:input][:id], placeholder, script[:input][:constraint]
+              input.focus! if script[:input][:failed] != true
             else
               next_dialogue.call
             end
           when :choice
-            if script[:choice].true? database
+            if Utils.command_conditions_passes? script[:choice]
               canvas.clear
 
               if script[:choice].include? :name

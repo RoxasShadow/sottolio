@@ -18,26 +18,25 @@
 #++
 module Sottolio
   class CanvasInput
-    def initialize(id, database, key, text = '', x = 500, y = 800)
-      @database  = database
-      @key       = key
-      @destroyed = false
+    def initialize(canvas_id, database, key, placeholder, constraint, x = 500, y = 800)
+      @database   = database
+      @key        = key
+      @constraint = constraint
+      @destroyed  = false
 
       %x{
-        #@canvas_input = new CanvasText(id, {
+        #@canvas_input = new CanvasText(canvas_id, {
           x:           x,
           y:           y,
-          placeHolder: text,
+          placeholder: placeholder,
           width:       300,
           padding:     8
         });
       }
-
-      focus
     end
 
-    def focus
-      `#@canvas_input.focus();`
+    def focus!
+      `#@canvas_input.focus()`
     end
 
     def value
@@ -61,6 +60,10 @@ module Sottolio
         #@canvas_input.destroy();
         delete #@canvas_input;
       }
+    end
+
+    def valid?
+      Utils.acceptable_constraint?(@constraint)
     end
 
     def present?

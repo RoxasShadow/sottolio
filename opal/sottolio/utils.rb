@@ -35,23 +35,35 @@ class String
   end
 end
 
-class Hash
-  # TODO: Find a better name for this (tl;dr eval conditional keys in the script's commands)
-  def true?(database)
-    return true unless self.include?(:if) || self.include?(:unless)
+module Utils
+  class << self
+    def database=(database)
+      @@database = database
+    end
 
-    res = []
-    sym = self.include?(:if) ? :if : :unless
-    [self[sym]].flatten.each { |c| # i.e.: [ '#feel# == good', '#name# == Patrizio' ]
-      statement = c.apply(database).split(/(.+)(==|!=|=~)(.+)/).delete_if { |s| s.strip.empty? }.map(&:strip)
-      eval = case statement[1] # #send won't work with !=
-        when '==' then statement[0] == statement[2]
-        when '!=' then statement[0] != statement[2]
-        when '=~' then statement[0] =~ statement[2].to_regex
+    def command_conditions_passes?(command)
+      return true unless command.include?(:if) || command.include?(:unless)
+
+      sym = command.include?(:if) ? :if : :unless
+      res = acceptable_constraint? [command[sym]]
+      sym == :if ? res : !res
+    end
+
+    def acceptable_constraint?(constraint)
+      res = []
+
+      [constraint].flatten.each do |c| # i.e.: [ '#feel# == good', '#name# == Patrizio' ]
+        statement = c.apply(@@database).split(/(.+)(==|!=|=~)(.+)/).delete_if { |s| s.strip.empty? }.map(&:strip)
+        eval = case statement[1] # #send won't work with !=
+          when '==' then statement[0] == statement[2]
+          when '!=' then statement[0] != statement[2]
+          when '=~' then !!(statement[0] =~ statement[2].to_regex)
+        end
+
+        res << eval
       end
-      res << eval # actually this is totally not safe
-    }
-    res << res.inject { |sum, x| sum && x }
-    return sym == :if ? res.last : !res.last
+
+      res.inject { |sum, x| sum && x }
+    end
   end
 end

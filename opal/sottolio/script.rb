@@ -29,8 +29,12 @@ module Sottolio
       @var.reverse!
     end
 
-    def <<(block)
-      instance_eval &block
+    def <<(obj)
+      if obj.is_a?(Proc)
+        instance_eval &obj
+      else
+        @var << obj
+      end
     end
 
     def_delegators :@var, :pop, :any?
