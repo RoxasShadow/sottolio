@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sottolio (0.1.4)
+    sottolio (0.2)
       opal (~> 0.8)
 
 GEM
