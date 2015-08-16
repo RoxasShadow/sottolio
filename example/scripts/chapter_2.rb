@@ -4,7 +4,7 @@ background  :id        => 'city',
 
 character   :id        => 'Rosalinda',
             :resource  => 'resources/characters/rosalinda.png',
-            :x         => 800,
+            :x         => 500,
             :y         => 120
 
 dialogue    :name      => 'Rosalinda',
