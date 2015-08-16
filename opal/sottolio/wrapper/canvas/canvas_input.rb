@@ -18,21 +18,14 @@
 #++
 module Sottolio
   class CanvasInput
-    def initialize(canvas_id, database, key, placeholder, constraint, x = 500, y = 800)
-      @database   = database
-      @key        = key
-      @constraint = constraint
-      @destroyed  = false
+    def initialize(canvas_id, database, key, placeholder, constraint, on_submit)
+      @database    = database
+      @key         = key
+      @constraint  = constraint
 
-      %x{
-        #@canvas_input = new CanvasText(canvas_id, {
-          x:           x,
-          y:           y,
-          placeholder: placeholder,
-          width:       300,
-          padding:     8
-        });
-      }
+      @canvas_error = CanvasError.new
+      @canvas_input = `$('<input>')`
+      build_and_mount placeholder, on_submit
     end
 
     def focus!
@@ -40,11 +33,11 @@ module Sottolio
     end
 
     def value
-      `#@canvas_input.value`
+      `#@canvas_input.val()`
     end
 
     def empty?
-      `#@canvas_input.value.length == 0`
+      value.empty?
     end
 
     def save
@@ -52,30 +45,45 @@ module Sottolio
     end
 
     def destroy
-      @destroy = true
+      `#@canvas_input.remove()`
+      @canvas_input = nil
 
-      %x{
-        #@canvas_input.unfocus();
-        #@canvas_input.refresh = null;
-        #@canvas_input.destroy();
-        delete #@canvas_input;
-      }
+      @canvas_error.destroy
+      @canvas_error = nil
     end
 
     def valid?
-      Utils.acceptable_constraint?(@constraint)
+      Utils.acceptable_constraint? @constraint
     end
 
     def present?
-      not destroyed?
+      `#@canvas_input != nil`
     end
 
     def destroyed?
-      @destroy
+      not present?
     end
 
     def save_and_destroy
       save && destroy
+    end
+
+    def fail!(error)
+      @canvas_error.error = error
+      focus!
+    end
+
+    private
+    def build_and_mount(placeholder, on_submit)
+      `#@canvas_input.attr('id', 'input')`
+      `#@canvas_input.attr('type', 'text')`
+      `#@canvas_input.attr('placeholder', placeholder)`
+      `#@canvas_input.on('keypress', function(e) {
+        if(e.which == 13) {
+          on_submit.call();
+        }
+      })`
+      `$('body').append(#@canvas_input)`
     end
   end
 end

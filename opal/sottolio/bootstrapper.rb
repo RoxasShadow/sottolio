@@ -119,9 +119,9 @@ module Sottolio
                 canvas_text.write script[:input][:text].apply(database)
               end
 
-              placeholder = (script[:input][:failed] == true ? script[:input][:on_fail] || 'Please check your input' : script[:input][:placeholder]).apply(database)
-              input = CanvasInput.new canvas_id, database, script[:input][:id], placeholder, script[:input][:constraint]
-              input.focus! if script[:input][:failed] != true
+              input = CanvasInput.new canvas_id, database, script[:input][:id], script[:input][:placeholder].apply(database), script[:input][:constraint], -> { next_dialogue.call }
+              input.focus!
+              input.fail!(script[:input][:on_fail] ? script[:input][:on_fail].apply(database) : 'Please check your input') if script[:input][:failed] == true
             else
               next_dialogue.call
             end

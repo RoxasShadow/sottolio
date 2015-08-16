@@ -19,5 +19,5 @@ dialogue    :name      => 'Rosalinda',
 remove      :id        => 'Rosalinda',
             :animation => :slide,                               # apply a slide animation to the left
             :to        => :left,
-            :speed     => 1.7
+            :speed     => 2.5
 end

@@ -16,27 +16,34 @@
 # You should have received a copy of the GNU General Public License
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
-require 'opal'
+module Sottolio
+  class CanvasError
+    def initialize
+      @canvas_error = `$('<span>')`
+      build_and_mount
+    end
 
-require 'sottolio/sottolio'
-require 'sottolio/bootstrapper'
-require 'sottolio/script'
-require 'sottolio/lock'
-require 'sottolio/database'
-require 'sottolio/utils'
+    def error=(message)
+      `#@canvas_error.html(message)`
+    end
 
-require 'sottolio/wrapper/canvas'
-require 'sottolio/wrapper/canvas/canvas_error'
-require 'sottolio/wrapper/canvas/canvas_input'
-require 'sottolio/wrapper/canvas/canvas_text'
-require 'sottolio/wrapper/canvas/canvas_button'
+    def destroy
+      `#@canvas_error.remove()`
+      @canvas_error = nil
+    end
 
-require 'sottolio/wrapper/image'
-require 'sottolio/wrapper/background'
-require 'sottolio/wrapper/character'
-require 'sottolio/image_manager'
+    def present?
+      `#@canvas_error != nil`
+    end
 
-require 'sottolio/wrapper/sound'
-require 'sottolio/sound_manager'
+    def destroyed?
+      not present?
+    end
 
-require 'sottolio/application'
+    private
+    def build_and_mount
+      `#@canvas_error.attr('id', 'inputError')`
+      `$('body').append(#@canvas_error)`
+    end
+  end
+end

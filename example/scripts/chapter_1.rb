@@ -25,7 +25,7 @@ input       :name        => 'Ambrogia',
             :id          => 'name',                               # the variable where the input will be saved
             :placeholder => 'Your name:',
             :constraint  => '#name# =~ /^[a-zA-Z]{3,10}$/',
-            :on_fail     => 'Your name has to be contained in 3-10 chars.' # printed if the input won't match the constraint
+            :on_fail     => 'Your name must be contained in 3-10 chars.' # printed if the input won't match the constraint
 
 dialogue    :name        => 'Ambrogia',
             :text        => 'Oh, hai #name#!',
