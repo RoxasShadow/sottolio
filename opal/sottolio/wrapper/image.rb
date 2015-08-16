@@ -18,7 +18,7 @@
 #++
 module Sottolio
   class Image < Canvas
-    attr_accessor :image, :id, :x, :y, :width, :height
+    attr_accessor :id
 
     def initialize(element, image, id, x = 0, y = 0)
       super element
@@ -37,8 +37,7 @@ module Sottolio
     end
 
     def draw_image(*args)
-      image = args.shift
-      x, y, width, height = args
+      image, x, y = args
       `#@canvas.drawImage(image, x, y)`
     end
 
@@ -52,7 +51,8 @@ module Sottolio
     end
 
     def out?
-      (@width + @x) < 0 || (@x + width) > 1276
+      position = @width + @x
+      position < 0 || position > 1276
     end
 
     def slide(pre_callback = nil, callback = nil, to = :right, speed = 1)
