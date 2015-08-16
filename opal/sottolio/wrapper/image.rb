@@ -23,16 +23,17 @@ module Sottolio
     def initialize(element, image, id, x = 0, y = 0)
       super element
 
-      @image = `new Image()`
-      `#@image.src = image`
+      @image     = `new Image()`
+      @image_src = image
 
-      @id     = id
-      @x      = x
-      @y      = y
+      @id = id
+      @x  = x
+      @y  = y
     end
 
     def on_load(callback)
-      `#@image.onload = callback`
+      `#@image.onload = callback;`
+      `#@image.src    = #@image_src;`
     end
 
     def draw_image(*args)
