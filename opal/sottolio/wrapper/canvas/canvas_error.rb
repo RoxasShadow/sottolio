@@ -42,7 +42,6 @@ module Sottolio
 
     private
     def build_and_mount
-      `#@canvas_error.attr('id', 'inputError')`
       `$('body').append(#@canvas_error)`
     end
   end

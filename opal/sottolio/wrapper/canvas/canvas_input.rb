@@ -75,7 +75,6 @@ module Sottolio
 
     private
     def build_and_mount(placeholder, on_submit)
-      `#@canvas_input.attr('id', 'input')`
       `#@canvas_input.attr('type', 'text')`
       `#@canvas_input.attr('placeholder', placeholder)`
       `#@canvas_input.on('keypress', function(e) {
