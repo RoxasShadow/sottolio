@@ -38,10 +38,10 @@ end
 class Hash
   # TODO: Find a better name for this (tl;dr eval conditional keys in the script's commands)
   def true?(database)
-    return true unless self.include?(:if) || self.include?(:if_not)
+    return true unless self.include?(:if) || self.include?(:unless)
 
     res = []
-    sym = self.include?(:if) ? :if : :if_not
+    sym = self.include?(:if) ? :if : :unless
     [self[sym]].flatten.each { |c| # i.e.: [ '#feel# == good', '#name# == Patrizio' ]
       statement = c.apply(database).split(/(.+)(==|!=|=~)(.+)/).delete_if { |s| s.strip.empty? }.map(&:strip)
       eval = case statement[1] # #send won't work with !=
