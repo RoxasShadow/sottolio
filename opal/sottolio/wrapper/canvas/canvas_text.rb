@@ -21,11 +21,8 @@ module Sottolio
     def initialize(element, hash = nil)
       super element, '2d'
 
-      @canvas_id = element
-
-      %x{
-        #@canvas_text = new CanvasText;
-      }
+      @canvas_id   = element
+      @canvas_text = `new CanvasText()`
 
       config hash if hash
     end
@@ -36,7 +33,8 @@ module Sottolio
           canvasId:   #{hash[:canvas_id]},
           fontFamily: #{hash[:font_family]},
           fontSize:   #{hash[:font_size]},
-          fontColor:  #{hash[:font_color]}
+          fontColor:  #{hash[:font_color]},
+          lineHeight: 30
         });
       }
     end
@@ -44,20 +42,19 @@ module Sottolio
     def draw_text(hash)
       %x{
         #@canvas_text.drawText({
-          x: #{hash[:x]},
-          y: #{hash[:y]},
-          text: #{hash[:text]},
-          boxWidth: #{hash[:box_width] || '130px'}
+          x:        #{hash[:x]},
+          y:        #{hash[:y]},
+          text:     #{hash[:text]},
+          boxWidth: 1280
         });
       }
     end
 
     def write(what, keep = false)
       draw_text({
-        :x         => 5,
-        :y         => 760,
-        :text      => what,
-        :box_width => '130px'
+        :x    => 10,
+        :y    => 760,
+        :text => what
       })
     end
   end

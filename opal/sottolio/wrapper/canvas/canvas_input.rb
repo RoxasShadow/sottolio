@@ -18,7 +18,7 @@
 #++
 module Sottolio
   class CanvasInput
-    def initialize(id, database, key, text = '', x = 10, y = 800)
+    def initialize(id, database, key, text = '', x = 12, y = 800)
       @database  = database
       @key       = key
       @destroyed = false
