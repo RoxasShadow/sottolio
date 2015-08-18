@@ -17,44 +17,19 @@
 # along with sottolio.  If not, see <http://www.gnu.org/licenses/>.
 #++
 module Sottolio
-  class Image < Canvas
-    include Animations
+  module Animations
+    def slide(pre_callback = nil, callback = nil, to = :right, speed = 1)
+      move = -> {
+        unless out?
+          @x = @x + ((to == :left ? -1 : 1) * speed)
+          draw @x, @y, true
+          pre_callback.call if pre_callback
+        else
+          callback.call if callback
+        end
+      }
 
-    attr_accessor :id
-
-    def initialize(element, image, id, x = 0, y = 0)
-      super element
-
-      @image     = `new Image()`
-      @image_src = image
-
-      @id = id
-      @x  = x
-      @y  = y
-    end
-
-    def on_load(callback)
-      `#@image.onload = callback;`
-      `#@image.src    = #@image_src;`
-    end
-
-    def draw_image(*args)
-      image, x, y = args
-      `#@canvas.drawImage(image, x, y)`
-    end
-
-    def draw(x = nil, y = nil, save = false)
-      draw_image @image, x || @x, y || @y
-
-      @width  = `#@image.width`
-      @height = `#@image.height`
-
-      @x, @y = x, y if save
-    end
-
-    def out?
-      position = @width + @x
-      position < 0 || position > 1276
+      `setInterval(move, 1)`
     end
   end
 end

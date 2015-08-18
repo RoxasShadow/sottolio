@@ -31,6 +31,7 @@ require 'sottolio/wrapper/canvas/canvas_input'
 require 'sottolio/wrapper/canvas/canvas_text'
 require 'sottolio/wrapper/canvas/canvas_button'
 
+require 'sottolio/wrapper/animations'
 require 'sottolio/wrapper/image'
 require 'sottolio/wrapper/background'
 require 'sottolio/wrapper/character'

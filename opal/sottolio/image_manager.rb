@@ -31,8 +31,8 @@ module Sottolio
       redraw = -> { @images.each_value &:draw }
       delete = -> { @images.delete id.to_sym; @images.each_value &:draw }
 
-      if animation == :slide
-        @images[id.to_sym].slide redraw, delete, to, speed
+      if animations.include?(animation)
+        @images[id.to_sym].send animation, redraw, delete, to, speed
       else
         delete.call
       end
@@ -53,6 +53,11 @@ module Sottolio
           image.draw x, y, x && y
         }
       end
+    end
+
+    private
+    def animations
+      @animations ||= Animations.public_instance_methods
     end
   end
 end
