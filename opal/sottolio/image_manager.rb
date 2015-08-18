@@ -27,12 +27,12 @@ module Sottolio
       @images[image.id.to_sym] = image
     end
 
-    def remove(id, animation = :none, to = nil, speed = nil)
+    def remove(id, animation = :none, opts = {})
       redraw = -> { @images.each_value &:draw }
       delete = -> { @images.delete id.to_sym; @images.each_value &:draw }
 
       if animations.include?(animation)
-        @images[id.to_sym].send animation, redraw, delete, to, speed
+        @images[id.to_sym].send animation, redraw, delete, opts
       else
         delete.call
       end

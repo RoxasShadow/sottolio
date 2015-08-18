@@ -94,7 +94,7 @@ module Sottolio
 
             next_dialogue.call
           when :remove
-            image_manager.remove script[:remove][:id], script[:remove][:animation], script[:remove][:to], script[:remove][:speed]
+            image_manager.remove script[:remove][:id], script[:remove][:animation], script[:remove]
 
             next_dialogue.call
           when :dialogue

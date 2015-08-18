@@ -18,14 +18,16 @@
 #++
 module Sottolio
   module Animations
-    def slide(pre_callback = nil, callback = nil, to = :right, speed = 1)
+    def slide(before, after, opts)
       move = -> {
+        to, speed = opts[:to], opts[:speed]
+
         unless out?
           @x = @x + ((to == :left ? -1 : 1) * speed)
           draw @x, @y, true
-          pre_callback.call if pre_callback
+          before.call
         else
-          callback.call if callback
+          after.call
         end
       }
 
