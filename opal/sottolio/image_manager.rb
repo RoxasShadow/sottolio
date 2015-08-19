@@ -38,9 +38,8 @@ module Sottolio
       end
     end
 
-    def draw(id, x, y, animation = :none, opts = {})
-      image = @images[id.to_sym]
-
+    def draw(id, x, y, animation, opts)
+      image  = @images[id.to_sym]
       render = -> { image.draw x, y, x && y }
 
       when_available image do

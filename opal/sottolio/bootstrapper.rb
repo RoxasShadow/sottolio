@@ -81,7 +81,7 @@ module Sottolio
             if Utils.command_conditions_passes? script[:background]
               background = Background.new canvas_id, script[:background][:resource], script[:background][:id]
               image_manager.add background
-              image_manager.draw script[:background][:id], script[:background][:animation], script[:background]
+              image_manager.draw script[:background][:id], nil, nil, script[:background][:animation], script[:background]
             end
 
             next_dialogue.call
