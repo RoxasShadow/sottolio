@@ -27,7 +27,7 @@ module Sottolio
       @images[image.id.to_sym] = image
     end
 
-    def remove(id, animation = :none, opts = {})
+    def remove(id, animation, opts)
       redraw = -> { @images.each_value &:draw }
       delete = -> { @images.delete id.to_sym; @images.each_value &:draw }
 
@@ -38,26 +38,39 @@ module Sottolio
       end
     end
 
-    def draw(id, x = nil, y = nil)
+    def draw(id, x, y, animation = :none, opts = {})
       image = @images[id.to_sym]
 
-      # We need to load images by keeping given priority
-      # (i.e. bg must loaded as first so characters appear on top).
-      @lock.on_free do
-        p "#{id} queued"
-        @lock.lock!
+      render = -> { image.draw x, y, x && y }
 
-        image.on_load -> {
-          p "#{id} loaded"
-          @lock.free!
-          image.draw x, y, x && y
-        }
+      when_available image do
+        if animations.include? animation
+          image.send animation, render, nil, opts
+        else
+          render.call
+        end
       end
     end
 
     private
     def animations
       @animations ||= Animations.public_instance_methods
+    end
+
+    def when_available(image, &block)
+      # We need to load images by keeping given priority
+      # (i.e. bg must loaded first so characters will appear on top).
+      @lock.on_free do
+        p "#{image.id} queued"
+        @lock.lock!
+
+        image.on_load -> {
+          p "#{image.id} loaded"
+          @lock.free!
+
+          block.call
+        }
+      end
     end
   end
 end

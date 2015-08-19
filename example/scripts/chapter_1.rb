@@ -10,12 +10,16 @@ play_sound  :id          => 'background_theme',
 character   :id          => 'Rosalinda',
             :resource    => 'resources/characters/rosalinda.png',
             :x           => 800,
-            :y           => 120
+            :y           => 120,
+            :animation   => :fade_in,
+            :speed       => 250
 
 character   :id          => 'Ambrogia',
             :resource    => 'resources/characters/ambrogia.png',
             :x           => 10,
-            :y           => 120
+            :y           => 120,
+            :animation   => :fade_in,
+            :speed       => 250
 
 dialogue    :name        => 'Ambrogia',                           # optional
             :text        => 'Hi!'
@@ -58,7 +62,9 @@ dialogue    :name        => 'Ambrogia',
 dialogue    :name        => 'Ambrogia',
             :text        => 'Ok, time to go, cya!'
 
-remove      :id          => 'Ambrogia'
+remove      :id          => 'Ambrogia',
+            :animation   => :fade_out,
+            :speed       => 2.5
 
 remove      :id          => 'Rosalinda'
 

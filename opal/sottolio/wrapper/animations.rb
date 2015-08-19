@@ -33,5 +33,28 @@ module Sottolio
 
       `setInterval(move, 1)`
     end
+
+    def fade_in(draw, _, opts)
+      speed     = opts[:speed] || 100
+      recursion = -> { fade_in(draw, _, opts) }
+
+      %x{
+        if(typeof #@image.alpha === 'undefined') {
+          #@image.alpha = 0;
+        }
+
+        #@canvas.globalAlpha = #@image.alpha / 100;
+        draw.call();
+
+        #@canvas.globalAlpha = 1.00;
+
+        ++#@image.alpha;
+
+        setInterval(function() {
+          if(#@image.alpha <= 100)
+            recursion.call();
+        }, speed);
+      }
+    end
   end
 end

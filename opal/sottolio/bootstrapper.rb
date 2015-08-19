@@ -81,7 +81,7 @@ module Sottolio
             if Utils.command_conditions_passes? script[:background]
               background = Background.new canvas_id, script[:background][:resource], script[:background][:id]
               image_manager.add background
-              image_manager.draw script[:background][:id]
+              image_manager.draw script[:background][:id], script[:background][:animation], script[:background]
             end
 
             next_dialogue.call
@@ -89,7 +89,7 @@ module Sottolio
             if Utils.command_conditions_passes? script[:character]
               character = Character.new canvas_id, script[:character][:resource], script[:character][:id]
               image_manager.add character
-              image_manager.draw script[:character][:id], script[:character][:x], script[:character][:y]
+              image_manager.draw script[:character][:id], script[:character][:x], script[:character][:y], script[:character][:animation], script[:character]
             end
 
             next_dialogue.call
