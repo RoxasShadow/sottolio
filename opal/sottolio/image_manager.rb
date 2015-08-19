@@ -63,12 +63,12 @@ module Sottolio
         p "#{image.id} queued"
         @lock.lock!
 
-        image.on_load -> {
+        image.on_load do
           p "#{image.id} loaded"
           @lock.free!
 
           block.call
-        }
+        end
       end
     end
   end

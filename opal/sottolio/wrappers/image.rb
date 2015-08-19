@@ -33,8 +33,8 @@ module Sottolio
       @y  = y
     end
 
-    def on_load(callback)
-      `#@image.onload = callback;`
+    def on_load(&block)
+      `#@image.onload = block;`
       `#@image.src    = #@image_src;`
     end
 
