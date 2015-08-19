@@ -1,3 +1,6 @@
 example/game/sottolio.js
 example/game/sottolio.min.js
 *.gem
+
+.ruby-gemset
+.ruby-version
